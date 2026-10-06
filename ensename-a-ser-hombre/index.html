@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enséñame a ser hombre</title>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<script>document.documentElement.className = 'js';</script>
+<style>html,body{margin:0;background:#f4f6fb}@media (prefers-color-scheme:dark){html.js,html.js body{background:#10151f}}
+.pl,.pl-scope{
+  --pl-bg:#f4f6fb; --pl-paper:#ffffff; --pl-ink:#1b2230; --pl-muted:#5f6a7d; --pl-line:#dbe2ee;
+  --pl-accent:#2f62d0; --pl-on:#ffffff; --pl-soft:#e3ebfb; --pl-accent-ink:#1f4aa8;
+  --pl-warm:#e8913a; --pl-warm-soft:#fdf0e1; --pl-warm-ink:#8a4a0c;
+  --pl-yc:#f2c21b; --pl-yc-soft:#fef8d2; --pl-yc-ink:#5e4a00;
+  --pl-cf:#2bb3a3; --pl-cf-soft:#e0f4f1; --pl-cf-ink:#125e55;
+  --pl-mh:#a3324f; --pl-mh-soft:#fbeef1; --pl-mh-ink:#7a1f39;
+  --pl-es:#3d4451; --pl-es-soft:#eff1f4; --pl-es-ink:#2b303a;
+  --pl-font:"Atkinson Hyperlegible","Segoe UI",Verdana,system-ui,sans-serif;
+}
+.pl.dark,.noche .pl-scope{
+  --pl-bg:#10151f; --pl-paper:#171f2e; --pl-ink:#e6ebf5; --pl-muted:#9ba8be; --pl-line:#2b374d;
+  --pl-accent:#6b95f0; --pl-on:#0d1422; --pl-soft:#1e2b46; --pl-accent-ink:#a3bef8;
+  --pl-warm:#f0a65c; --pl-warm-soft:#33261a; --pl-warm-ink:#f5c08a;
+  --pl-yc:#fcd13b; --pl-yc-soft:#2f2a14; --pl-yc-ink:#fcd96a;
+  --pl-cf:#3cc8b7; --pl-cf-soft:#14302d; --pl-cf-ink:#7fe0d3;
+  --pl-mh:#e0708c; --pl-mh-soft:#2e1a20; --pl-mh-ink:#f1a3b6;
+  --pl-es:#8e98aa; --pl-es-soft:#1d222b; --pl-es-ink:#c5ccd8;
+}
+.pl{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;background:var(--pl-bg);color:var(--pl-ink);font-family:var(--pl-font);font-size:var(--pl-size,21px);line-height:1.55}
+.pl *{box-sizing:border-box}
+.pl button{font-family:inherit}
+.pl-top{display:flex;align-items:center;gap:6px;padding:8px 12px;border-bottom:1px solid var(--pl-line);background:var(--pl-paper);font-size:15px;flex:none}
+/* sin actividad unos segundos: las barras se esconden (y el cursor) para dejar solo el contenido */
+.pl-top,.pl-nav{transition:opacity .45s,transform .45s}
+.pl.idle .pl-top{opacity:0;transform:translateY(-100%);pointer-events:none}
+.pl.idle .pl-nav{opacity:0;transform:translateY(100%);pointer-events:none}
+.pl.idle,.pl.idle *{cursor:none!important}
+.pl-top .ttl{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;color:var(--pl-muted)}
+.pl-ib{border:0;background:none;color:var(--pl-muted);font-size:15px;padding:6px 9px;border-radius:9px;cursor:pointer;line-height:1;white-space:nowrap}
+.pl-ib:hover{background:var(--pl-soft);color:var(--pl-ink)}
+.pl-ib:disabled{opacity:.35;cursor:default;background:none}
+.pl-ib.on{background:var(--pl-warm-soft);color:var(--pl-warm-ink)}
+/* aviso suave: este paso tiene una nota y las notas están ocultas */
+.pl-ib.has{position:relative;color:var(--pl-warm-ink);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--pl-warm) 55%,transparent);animation:pl-nudge 2.4s ease-in-out 2}
+.pl-ib.has::after{content:"";position:absolute;top:3px;right:3px;width:7px;height:7px;border-radius:50%;background:var(--pl-warm)}
+@keyframes pl-nudge{0%,100%{background:transparent}50%{background:var(--pl-warm-soft)}}
+.pl-main{flex:1;overflow:auto;-webkit-overflow-scrolling:touch;display:flex;flex-direction:column}
+.pl-step{max-width:44em;width:100%;margin:0 auto;padding:1.6em 1.3em 2.4em}
+/* pasos de pregunta: centrados en la pantalla (si no entran, se scrollea normal) */
+.pl-step.pl-center,.pl-step.pl-vcenter{margin:auto}   /* pl-vcenter: solo en vertical (los textos mantienen su alineación) */
+.pl-center > h2,.pl-center > .pl-txt{text-align:center}
+.pl-step > h2{font-size:1.45em;line-height:1.25;margin:0 0 .7em}
+.pl-kind{display:inline-block;font-size:.62em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--pl-muted);margin-bottom:.5em}
+.pl-txt{white-space:pre-wrap;margin:0 0 1em;overflow-wrap:break-word}
+.pl-q.ic-none::before{display:none}
+.pl-q.ic-none{padding-top:1.3em}
+.pl-q.ic-warm{border-color:color-mix(in srgb,var(--pl-warm) 45%,var(--pl-line));box-shadow:0 14px 34px -18px color-mix(in srgb,var(--pl-warm) 60%,transparent)}
+.pl-q.ic-warm::before{background:var(--pl-warm);color:#fff}
+.pl-q.ic-red{border-color:color-mix(in srgb,#d6402b 45%,var(--pl-line));box-shadow:0 14px 34px -18px color-mix(in srgb,#d6402b 55%,transparent)}
+.pl-q.ic-red::before{background:#d6402b;color:#fff}
+.pl-q.ic-green{border-color:color-mix(in srgb,#3f8f4f 45%,var(--pl-line));box-shadow:0 14px 34px -18px color-mix(in srgb,#3f8f4f 55%,transparent)}
+.pl-q.ic-green::before{background:#3f8f4f;color:#fff}
+.pl-q.ic-purple{border-color:color-mix(in srgb,#7b52c7 45%,var(--pl-line));box-shadow:0 14px 34px -18px color-mix(in srgb,#7b52c7 55%,transparent)}
+.pl-q.ic-purple::before{background:#7b52c7;color:#fff}
+.pl-q{position:relative;background:var(--pl-paper);border:2px solid color-mix(in srgb,var(--pl-accent) 30%,var(--pl-line));border-radius:24px;padding:1.6em 1.4em 1.3em;margin:1.4em 0 1.3em;font-size:1.35em;line-height:1.38;text-align:center;white-space:pre-wrap;overflow-wrap:break-word;box-shadow:0 14px 34px -18px color-mix(in srgb,var(--pl-accent) 55%,transparent)}
+.pl-q::before{content:attr(data-ic);position:absolute;top:0;left:50%;transform:translate(-50%,-50%);width:1.55em;height:1.55em;border-radius:50%;background:var(--pl-accent);color:var(--pl-on);display:grid;place-items:center;font-size:.85em;font-weight:700;line-height:1;box-shadow:0 0 0 6px var(--pl-bg)}
+.pl-prop{background:var(--pl-warm-soft);border:1px solid color-mix(in srgb,var(--pl-warm) 45%,transparent);border-radius:14px;padding:1em 1.1em;margin:0 0 1em}
+.pl-prop .pl-txt{margin-bottom:.6em;font-weight:700}
+.pl-prop textarea{width:100%;min-height:6em;border:1px solid color-mix(in srgb,var(--pl-warm) 50%,transparent);border-radius:10px;padding:.6em .7em;font:inherit;font-size:.92em;background:var(--pl-paper);color:var(--pl-ink);resize:vertical}
+.pl-prop .saved{font-size:.65em;color:var(--pl-warm-ink);margin-top:.3em;min-height:1.2em}
+.pl-media{margin:0 0 1em}
+.pl-media img{display:block;max-width:100%;max-height:72vh;margin:0 auto;border-radius:12px;cursor:zoom-in}
+.pl-media video{display:block;width:100%;max-height:72vh;border-radius:12px;background:#000}
+.pl-media audio{width:100%}
+.pl-frame{position:relative;width:100%;padding-top:56.25%;border-radius:12px;overflow:hidden;background:#000}
+.pl-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.pl-pdf{width:100%;height:75vh;border:1px solid var(--pl-line);border-radius:12px;background:#fff}
+.pl-open{display:inline-flex;align-items:center;gap:.4em;margin-top:.5em;font-size:.8em;font-weight:700;color:var(--pl-accent-ink);background:var(--pl-soft);border-radius:10px;padding:.45em .9em;text-decoration:none;border:0;cursor:pointer}
+.pl-link{display:flex;align-items:center;gap:.6em;background:var(--pl-paper);border:1px solid var(--pl-line);border-radius:14px;padding:.8em 1em;text-decoration:none;color:var(--pl-ink);margin:0 0 1em;word-break:break-all}
+.pl-link:hover{border-color:var(--pl-accent)}
+.pl-link b{color:var(--pl-accent-ink)}
+.pl-note{border:2px dashed color-mix(in srgb,var(--pl-warm) 60%,transparent);background:var(--pl-warm-soft);color:var(--pl-warm-ink);border-radius:12px;padding:.6em .9em;margin:1.4em 0 0;font-size:.78em;white-space:pre-wrap}
+.pl-note b{display:block;font-size:.85em;letter-spacing:.05em;text-transform:uppercase}
+.pl-missing{color:var(--pl-muted);font-style:italic;border:1px dashed var(--pl-line);border-radius:12px;padding:1em;margin:0 0 1em}
+.pl-nav{position:relative;display:flex;align-items:center;gap:10px;padding:10px 14px;border-top:1px solid var(--pl-line);background:var(--pl-paper);flex:none}
+/* nota sin leer: puntito en «Siguiente» y aviso si se intenta pasar sin verla */
+.pl-btn.notedot{position:relative}
+.pl-btn.notedot::after{content:"";position:absolute;top:-4px;right:-4px;width:11px;height:11px;border-radius:50%;background:var(--pl-warm);box-shadow:0 0 0 2px var(--pl-paper)}
+.pl-warn{position:absolute;right:12px;bottom:calc(100% + 10px);z-index:5;max-width:min(420px,calc(100vw - 24px));background:var(--pl-paper);color:var(--pl-ink);border:1.5px solid color-mix(in srgb,var(--pl-warm) 60%,transparent);border-radius:14px;padding:.75em .9em;font-size:15px;line-height:1.4;box-shadow:0 10px 30px rgba(0,0,0,.18);animation:pl-pop .18s ease-out}
+.pl-warn::after{content:"";position:absolute;right:34px;bottom:-8px;width:14px;height:14px;background:var(--pl-paper);border-right:1.5px solid color-mix(in srgb,var(--pl-warm) 60%,transparent);border-bottom:1.5px solid color-mix(in srgb,var(--pl-warm) 60%,transparent);transform:rotate(45deg)}
+.pl-warn b{color:var(--pl-warm-ink)}
+.pl-warn .acts{display:flex;gap:8px;justify-content:flex-end;margin-top:.6em;flex-wrap:wrap}
+.pl-warn .pl-btn{font-size:14px;padding:.4em .9em}
+@keyframes pl-pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.pl-btn{border:1px solid var(--pl-line);background:var(--pl-paper);color:var(--pl-ink);border-radius:12px;padding:.55em 1.1em;font-size:16px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pl-btn:hover{border-color:var(--pl-accent)}
+.pl-btn.pri{background:var(--pl-accent);border-color:var(--pl-accent);color:var(--pl-on)}
+.pl-btn:disabled{opacity:.35;cursor:default}
+.pl-prog{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0}
+.pl-bar{width:100%;max-width:420px;height:6px;border-radius:99px;background:var(--pl-line);overflow:hidden}
+.pl-bar > div{height:100%;background:var(--pl-accent);transition:width .3s}
+.pl-count{font-size:13px;color:var(--pl-muted)}
+.pl-cover{max-width:38em;width:100%;margin:0 auto;padding:12vh 1.4em 2em;text-align:center}
+.pl-cover .eyebrow{font-size:.62em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--pl-accent-ink)}
+.pl-cover h1{font-size:2.1em;line-height:1.15;margin:.3em 0 .25em}
+.pl-cover .csub{font-size:1.05em;color:var(--pl-muted);margin:0 0 .3em}
+.pl-cover .cgoal{text-align:left;background:var(--pl-paper);border:1px solid var(--pl-line);border-radius:14px;padding:.9em 1.1em;margin:1.4em 0;white-space:pre-wrap;font-size:.92em}
+.pl-cover .cmeta{font-size:.7em;color:var(--pl-muted);margin-bottom:1.4em}
+.pl-cover .pl-btn{font-size:19px;padding:.6em 1.6em;margin:.25em}
+.pl-closing{text-align:center;padding-top:10vh}
+.pl-closing .ct{font-size:1.9em;font-weight:700;line-height:1.2;margin:0 0 .3em}
+.pl-closing .cs{font-size:1.15em;color:var(--pl-muted);margin:0 0 1.4em;white-space:pre-wrap}
+.pl-recap{text-align:left;max-width:34em;margin:1.2em auto}
+.pl-recap h3{font-size:.85em;color:var(--pl-warm-ink);margin:0 0 .5em}
+.pl-recap .rc{background:var(--pl-warm-soft);border-left:5px solid var(--pl-warm);border-radius:0 12px 12px 0;padding:.7em 1em;margin:0 0 .6em;white-space:pre-wrap}
+.pl-recap .rc small{display:block;color:var(--pl-muted);font-size:.7em;margin-bottom:.2em}
+.pl-light{position:fixed;inset:0;z-index:1100;background:rgba(0,0,0,.92);display:grid;place-items:center;cursor:zoom-out}
+.pl-light img{max-width:98vw;max-height:98vh}
+/* textos de los libros */
+.bk{border-radius:16px;padding:1em 1.15em;margin:0 0 1em;border:1px solid var(--pl-line);background:var(--pl-paper);font-family:var(--pl-font,inherit);color:var(--pl-ink)}
+.bk-yc{border-color:color-mix(in srgb,var(--pl-yc) 60%,transparent);background:var(--pl-yc-soft)}
+.bk-cf{border-color:color-mix(in srgb,var(--pl-cf) 55%,transparent);background:var(--pl-cf-soft)}
+.bk-tag{display:inline-block;font-size:.62em;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;padding:.25em .6em;margin-bottom:.5em}
+.bk-yc .bk-tag{background:var(--pl-yc);color:#1d1d1b}
+.bk-cf .bk-tag{background:var(--pl-cf);color:#fff}
+.bk-mh{border-color:color-mix(in srgb,var(--pl-mh) 45%,transparent);background:var(--pl-mh-soft)}
+.bk-mh .bk-tag{background:var(--pl-mh);color:#fff}
+.bk-mh .bk-kick{color:var(--pl-mh-ink)}
+.bk-es{border-color:color-mix(in srgb,var(--pl-es) 40%,transparent);background:var(--pl-es-soft)}
+.bk-es .bk-tag{background:var(--pl-es);color:#fff}
+.bk-es .bk-kick{color:var(--pl-es-ink)}
+.bk-es .bk-c h4{color:var(--pl-es-ink)}
+.bk-q.bk-big{font-size:1.9em;text-align:center;margin:.5em 0 .4em;line-height:1.2}
+.bk-c ul ul{margin:.2em 0 .3em}
+.bk-c .rows .row.full,.bk-c .rows.lab .row.full{grid-template-columns:1fr}
+.bk-es .bk-c > ul{margin-bottom:.35em}
+.bk-lib{border-color:color-mix(in srgb,var(--bc) 45%,transparent);background:color-mix(in srgb,var(--bc) 7%,var(--pl-paper))}
+.bk-lib .bk-tag{background:var(--bc);color:#fff}
+.bk-lib .bk-kick,.bk-lib .bk-c h4{color:color-mix(in srgb,var(--bc) 70%,var(--pl-ink))}
+.bk-lib .bk-c blockquote{border-left-color:var(--bc)}
+.bk-c blockquote .src{display:block;font-size:.8em;color:var(--pl-muted);margin-top:.35em}
+.bk-ref{font-size:.72em;color:var(--pl-muted);margin-top:.6em}
+.bk-fn{font-size:.62em;font-weight:700;color:var(--pl-muted);vertical-align:super;line-height:0;margin-left:.1em}
+.bk-gap{color:var(--pl-muted);white-space:nowrap}
+.bk-notes{border-top:1px solid var(--pl-line);margin-top:.6em;padding-top:.5em;font-size:.72em;color:var(--pl-muted);line-height:1.45}
+.bk-notes .h{font-weight:700;letter-spacing:.06em;text-transform:uppercase;font-size:.85em;margin-bottom:.3em}
+.bk-notes p{margin:0 0 .3em}
+.bk-kick{font-size:.75em;color:var(--pl-muted);font-weight:700;margin:-.2em 0 .3em}
+.bk-q{font-size:1.15em;font-weight:700;line-height:1.3;margin:0 0 .55em}
+.bk-a{font-weight:700;margin:0 0 .8em}
+.bk-c p,.bk-c > *{margin:0 0 .75em}
+.bk-c{text-align:justify;hyphens:auto;-webkit-hyphens:auto}
+.bk-c h4{font-size:1em;color:var(--pl-cf-ink);margin:1em 0 .4em;text-align:left}
+.bk-c blockquote{margin:0 0 .8em;padding:.5em .9em;background:var(--pl-paper);border-left:4px solid var(--pl-cf);border-radius:0 10px 10px 0}
+.bk-c ul,.bk-c ol{padding-left:1.3em}
+.bk-c .box{background:var(--pl-paper);border:1px solid var(--pl-line);border-radius:10px;padding:.5em .8em;margin:0 0 .8em}
+.bk-c .rows{border-left:3px solid var(--pl-line);padding-left:.8em;margin:0 0 .8em}
+.bk-c .row{display:grid;grid-template-columns:1fr 1fr;gap:.1em 1em;padding:.25em 0;border-bottom:1px dotted var(--pl-line)}
+.bk-c .rows.lab .row{grid-template-columns:9em 1fr}
+.bk-x{border-bottom:1.5px solid currentColor}
+.bk-r{display:inline-block;font-size:.72em;font-weight:700;border-radius:99px;padding:0 .45em;background:var(--pl-yc);color:#1d1d1b;vertical-align:.08em}
+.bk-r::before{content:"→ "}
+.bk-ms{display:grid;grid-template-columns:repeat(auto-fill,minmax(15em,1fr));gap:.6em;margin-top:.9em}
+.bk-mg{background:var(--pl-paper);border:1px solid var(--pl-line);border-radius:12px;padding:.6em .8em;font-size:.82em;line-height:1.5}
+.bk-mg .h{font-size:.78em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pl-muted);margin-bottom:.2em}
+.bk-mg .s{font-size:.85em;color:var(--pl-muted);margin-top:.35em}
+.bk-show{display:block;margin:.2em 0 .8em;border:2px dashed currentColor;background:transparent;color:var(--pl-ink);border-radius:12px;padding:.6em 1em;font:inherit;font-weight:700;cursor:pointer;width:100%}
+.bk-hide{display:none}
+@media (max-width:640px){
+  .pl{font-size:var(--pl-size-m,18px)}
+  .pl-step{padding:1.1em 1em 2em}
+  .pl-nav{padding:8px 10px;gap:6px}
+  .pl-btn{padding:.55em .8em;font-size:15px}
+  .pl-top .ttl{display:none}
+  .pl-top{justify-content:flex-end}
+  .bk-c{text-align:left}
+  .bk-c .row,.bk-c .rows.lab .row{grid-template-columns:1fr}
+}
+@media print{
+  .pl-print{font-size:12pt}
+}
+/* paso «Pregunta»: caja para escribir y opciones para marcar */
+.pl-ans{margin:0 0 1em;text-align:left}
+.pl-ans textarea{display:block;width:100%;min-height:5.5em;border:1.5px solid color-mix(in srgb,var(--pl-accent) 35%,var(--pl-line));border-radius:12px;padding:.6em .75em;font:inherit;font-size:.9em;background:var(--pl-paper);color:var(--pl-ink);resize:vertical}
+.pl-ans .saved{font-size:.62em;color:var(--pl-muted);margin-top:.3em;min-height:1.2em}
+.pl-ans.priv textarea{border-style:dashed;border-color:color-mix(in srgb,#7b52c7 55%,var(--pl-line))}
+.pl-priv{font-size:.62em;color:var(--pl-muted);margin-top:.35em;line-height:1.4}
+.pl-opts{display:flex;flex-wrap:wrap;gap:.45em;justify-content:center;margin:0 0 1em}
+.pl-opt{border:1.5px solid var(--pl-line);background:var(--pl-paper);color:var(--pl-ink);border-radius:99px;padding:.4em .95em;font:inherit;font-size:.8em;line-height:1.3;cursor:pointer}
+.pl-opt.on{background:var(--pl-accent);border-color:var(--pl-accent);color:var(--pl-on)}
+.pl-opt.on::before{content:"✓ "}
+.pl-unica{text-align:center;font-size:.62em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pl-muted);margin:-.4em 0 .5em}
+.pl-cond{display:inline-block;font-size:.62em;font-weight:700;color:var(--pl-accent-ink);background:var(--pl-soft);border-radius:8px;padding:.2em .6em;margin:0 0 .5em}
+.pl-cover .cpriv,.pl-hoja .cpriv{font-size:.62em;color:var(--pl-muted);max-width:32em;margin:1.8em auto 0;line-height:1.5;text-align:center}
+.pl-cover .pl-btn.lite{font-size:15px;padding:.5em 1.1em;margin-top:.8em}
+/* hoja de preguntas */
+.pl-hoja .eyebrow{font-size:.62em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--pl-accent-ink);text-align:center}
+.pl-hoja h1{font-size:1.6em;line-height:1.2;margin:.2em 0 .3em;text-align:center}
+.pl-hoja .hsub{text-align:center;color:var(--pl-muted);font-size:.8em;margin:0 0 .6em}
+.pl-hoja .pl-hacts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:.8em 0 1.2em}
+.pl-hoja .hq{border-top:1px solid var(--pl-line);padding:1em 0 .2em}
+.pl-hoja .hq h2{font-size:1em;margin:0 0 .3em}
+.pl-hoja .pl-q{font-size:1.05em;text-align:left;margin:.3em 0 .8em;padding:.8em 1em;border-radius:14px;box-shadow:none}
+.pl-hoja .pl-q::before{display:none}
+.pl-hoja .pl-opts{justify-content:flex-start}
+@media print{
+  html,body{background:#fff!important;overflow:visible!important;height:auto!important}
+  body > :not(.pl){display:none!important}
+  .pl,.pl.dark{--pl-bg:#fff;--pl-paper:#fff;--pl-ink:#000;--pl-muted:#444;--pl-line:#bbb;--pl-soft:#eee;--pl-accent:#333;--pl-on:#fff;--pl-accent-ink:#000}
+  .pl{position:static;display:block;font-size:12pt}
+  .pl-top,.pl-nav,.pl-noprint{display:none!important}
+  .pl-main{overflow:visible;display:block}
+  .pl-hoja{padding:0}
+  .pl-hoja .hq{break-inside:avoid}
+  .pl-hoja textarea{border:1px solid #999;resize:none;overflow:hidden}
+  .pl-hoja .saved,.pl-hoja .pl-priv{display:none}
+}
+
+.js #nojs{display:none}
+#nojs .nj-hint{font-size:.72em;color:var(--pl-muted);margin:.3em 0 1em}
+#nojs .nj-pip{display:flex;gap:.6em;align-items:flex-start;background:var(--pl-soft);color:var(--pl-ink);border:1.5px solid color-mix(in srgb,var(--pl-accent) 35%,transparent);border-radius:14px;padding:.7em .85em;margin:.2em 0 1em;font-size:.8em;line-height:1.45}
+#nojs .nj-pip .ic{flex:none;width:38px;height:38px;border-radius:10px;background:var(--pl-paper);color:var(--pl-accent-ink);display:grid;place-items:center;border:1px solid var(--pl-line)}
+#nojs .nj-yt{position:relative;display:block;border-radius:12px;overflow:hidden;margin:0 0 .5em;background:#000}
+#nojs .nj-yt img{display:block;width:100%}
+#nojs .nj-yt span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:68px;height:48px;border-radius:14px;background:#e62117;color:#fff;display:grid;place-items:center;font-size:24px}
+#nojs .nj-pdf figure{margin:0 0 1em}
+#nojs .nj-pdf img{display:block;width:100%;border:1px solid var(--pl-line);border-radius:8px;background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+#nojs .nj-pdf figcaption{font-size:.65em;color:var(--pl-muted);text-align:center;margin-top:.3em}
+#nojs{font-family:var(--pl-font);color:var(--pl-ink);font-size:19px;line-height:1.55}
+#nojs .nj-cover{max-width:36em;margin:0 auto;min-height:100vh;box-sizing:border-box;padding:14vh 1.2em 2em;text-align:center}
+#nojs .nj-eyebrow{font-size:.7em;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--pl-accent-ink)}
+#nojs h1{font-size:1.9em;line-height:1.15;margin:.3em 0}
+#nojs .nj-sub{color:var(--pl-muted);margin:.2em 0}
+#nojs .nj-intro{text-align:left;background:var(--pl-paper);border:1px solid var(--pl-line);border-radius:14px;padding:.8em 1em;margin:1.2em 0;white-space:pre-wrap}
+#nojs .nj-meta{font-size:.75em;color:var(--pl-muted);margin:1.2em 0}
+#nojs .nj-btn{display:inline-block;text-decoration:none;border:1px solid var(--pl-line);background:var(--pl-paper);color:var(--pl-ink);border-radius:12px;padding:.5em 1em;font-weight:700;font-size:16px}
+#nojs .nj-btn.pri{background:var(--pl-accent);border-color:var(--pl-accent);color:#fff}
+#nojs .nj-btn.big{font-size:19px;padding:.65em 1.8em}
+#nojs .nj-link{display:inline-block;margin-top:1em;font-size:.8em;color:var(--pl-muted)}
+/* paso a paso sin JavaScript: se ve solo el paso al que apunta el enlace (#p1, #p2…) */
+#nojs .nj-step{display:none;min-height:100vh;box-sizing:border-box;flex-direction:column}
+#nojs .nj-step:target{display:flex}
+#nojs:has(.nj-step:target) .nj-cover,#nojs:has(#todo:target) .nj-cover{display:none}
+#nojs .nj-body{flex:1;width:100%;max-width:44em;margin:0 auto;box-sizing:border-box;padding:1.4em 1.2em 1.5em}
+#nojs .nj-step.center .nj-body,#nojs .nj-step.vcenter .nj-body{display:flex;flex-direction:column;justify-content:center}
+#nojs .nj-step.center .nj-body > h2,#nojs .nj-step.center .nj-body > .pl-txt{text-align:center}
+#nojs .nj-body h2{font-size:1.35em;line-height:1.25;margin:0 0 .6em}
+#nojs .nj-nav{position:sticky;bottom:0;display:flex;align-items:center;gap:10px;padding:10px 14px calc(10px + env(safe-area-inset-bottom));background:var(--pl-paper);border-top:1px solid var(--pl-line)}
+#nojs .nj-c{flex:1;text-align:center;font-size:13px;color:var(--pl-muted)}
+#nojs .bk-show{display:none} #nojs .bk-hide{display:block}
+#nojs .nj-write{min-height:4em;border-bottom:1.5px dashed var(--pl-warm);margin-top:.4em}
+#nojs .nj-end .ct{font-size:1.8em;font-weight:700;text-align:center;margin:0 0 .3em}
+#nojs .nj-end .cs{text-align:center;color:var(--pl-muted);white-space:pre-wrap}
+#nojs .nj-attr{font-size:.6em;color:var(--pl-muted);text-align:center;padding:1em;display:none}
+#nojs:not(:has(.nj-step:target)):not(:has(#todo:target)) .nj-attr{display:block}
+/* «ver todo seguido» */
+#todo:target ~ .nj-step{display:flex;min-height:0}
+#todo:target ~ .nj-step .nj-nav{display:none}
+#todo:target ~ .nj-step .nj-body{border-bottom:1px solid var(--pl-line)}
+/* nota para el catequista: se abre y se cierra tocándola (sin JavaScript) */
+#nojs .nj-note{position:static}
+#nojs .nj-note > summary{list-style:none;cursor:pointer;font-weight:700;font-size:15px;color:#8a4a0c;background:#fdf0e1;border:1.5px solid #f0c48f;border-radius:12px;padding:.45em .8em;white-space:nowrap}
+#nojs .nj-note > summary::-webkit-details-marker{display:none}
+#nojs .nj-note[open] > summary{background:#f8dcb8}
+#nojs .nj-notebox{position:absolute;bottom:calc(100% + 10px);left:12px;right:12px;max-width:30em;margin:0 auto;background:#fffaf3;color:#5a3108;border:2px dashed #e8913a;border-radius:14px;padding:.8em 1em;font-size:16px;line-height:1.45;white-space:pre-wrap;box-shadow:0 10px 30px rgba(0,0,0,.18)}
+#nojs .nj-nav{flex-wrap:nowrap}
+
+#nojs .nj-nav .nj-btn{white-space:nowrap}
+#nojs .nj-c{white-space:nowrap}
+@media (max-width:440px){ #nojs .nj-nav{gap:7px;padding-left:10px;padding-right:10px} #nojs .nj-nav .w{display:none} #nojs .nj-nav .nj-btn{padding:.5em .8em;font-size:15px} #nojs .nj-note > summary{padding:.45em .6em;font-size:14px} #nojs .nj-c{font-size:12px} }
+
+/* en la vista previa de WhatsApp el borde de abajo queda tapado: la barra va dentro de la página (arriba y al final), no fija */
+#nojs .nj-step{min-height:0}
+#nojs .nj-step.center .nj-body,#nojs .nj-step.vcenter .nj-body{display:block;padding-top:1.4em}
+#nojs .nj-nav{position:relative;max-width:44em;width:100%;box-sizing:border-box;margin:0 auto;border:1px solid var(--pl-line);border-radius:16px;padding:10px 12px}
+#nojs .nj-nav:not(.nj-top){margin-bottom:45vh;width:calc(100% - 20px);background:var(--pl-paper)}
+#nojs .nj-top{margin-top:12px;background:transparent;border-color:transparent}
+#nojs .nj-step .nj-body{padding-bottom:1em}
+#todo:target ~ .nj-step .nj-top{display:none}
+#nojs .nj-cover{padding-bottom:45vh}
+
+#nojs .nj-notebox{bottom:auto;top:calc(100% + 10px)}
+</style>
+</head><body>
+<div id="nojs" class="pl-scope"><section class="nj-cover" id="inicio"><div class="nj-eyebrow">Encuentro</div><h1>Enséñame a ser hombre</h1><p class="nj-sub">Un diálogo con mis referentes</p><div class="nj-intro">Una propuesta de ESI para el nivel medio.</div><p class="nj-meta">29 pasos</p><a class="nj-btn pri big" href="#p1">Comenzar</a><br><a class="nj-link" href="#todo">o ver todo seguido</a></section><div id="todo"></div><section class="nj-step vcenter" id="p1"><nav class="nj-nav nj-top"><a class="nj-btn" href="#inicio">←<span class="w"> Anterior</span></a><span class="nj-c">1 de 29</span><a class="nj-btn pri" href="#p2">Siguiente →</a></nav><div class="nj-body"><h2>Antes de empezar</h2><div class="pl-txt ">Este encuentro se puede hacer <b>solo o en grupo</b>.
+
+Vas a leer un relato corto, ver un video de seis minutos y pensar algunas preguntas. Al final, la propuesta es animarte a <b>conversar con un adulto importante en tu vida</b>: mamá, papá, una abuela, un tío, un hermano mayor, un catequista, un profe… Cualquier persona que consideres un referente en tu vida.
+
+Ninguna pregunta es obligatoria. Respondé solo lo que quieras.</div></div><nav class="nj-nav"><a class="nj-btn" href="#inicio">←<span class="w"> Anterior</span></a><span class="nj-c">1 de 29</span><a class="nj-btn pri" href="#p2">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p2"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p1">←<span class="w"> Anterior</span></a><span class="nj-c">2 de 29</span><a class="nj-btn pri" href="#p3">Siguiente →</a></nav><div class="nj-body"><h2>1. Información</h2><div class="pl-txt ">Primero, una historia y un testimonio.</div></div><nav class="nj-nav"><a class="nj-btn" href="#p1">←<span class="w"> Anterior</span></a><span class="nj-c">2 de 29</span><a class="nj-btn pri" href="#p3">Siguiente →</a></nav></section><section class="nj-step" id="p3"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p2">←<span class="w"> Anterior</span></a><span class="nj-c">3 de 29</span><a class="nj-btn pri" href="#p4">Siguiente →</a></nav><div class="nj-body"><h2>«Enséñame a ser hombre»</h2><div class="pl-txt ">Capítulo I del cuento &quot;Enseñame a ser hombre&quot; de Juan Dahbar. Leelo tranquilo, o en voz alta si están en grupo.</div><div class="bk bk-lib" style="--bc:#8b3a2b"><span class="bk-tag">Enséñame a ser hombre</span><div class="bk-kick">Capítulo I · Enséñame a ser hombre</div><div class="bk-c"><blockquote>A mis amigos que muchas veces me han pedido que les enseñe a ser hombres.<span class="src">— Dedicatoria del autor</span></blockquote><p>En ese momento Juan pasaba frente una pequeña casa, ante la cual un niño sentado en el patio, jugaba a la guerra tratando inútilmente de armar por tercera vez una pequeña torre de madera, frente a una ciudad imaginaria.</p><p>Ese niño se llamaba Jorge.</p><p>Juan, todas las mañanas al ir al palacio del Rey a sus ejercicios militares encontraba al niño jugando al frente de su casa. Pero ese día el niño dejó sus juegos y encarándose con él le dijo bruscamente:</p><p>-Quiero ser tu amigo.</p><p>-¿Mi amigo? -contestó extrañado.</p><p>-Sí, - respondió Jorge con naturalidad.</p><p>-Eso no puede ser.</p><p>-¿Por qué no puede ser?</p><p>-Porque yo tengo 25 años y tú no tienes ni siquiera 15.</p><p>-El mes que viene cumpliré los trece.</p><p>-Ya ves, demasiada diferencia.</p><p>Mas el niño con un empeño que desconcertaba prosiguió:</p><p>-Pero yo quiero ser tu amigo lo mismo. ¿Seremos amigos?- Y miró al rostro guerrero con sus azules ojos chispeantes de inocencia.</p><p>Juan no supo qué responder. Acarició con bondad la rubia cabeza del niño y le dijo con afectada seriedad:</p><p>-Bueno... seremos amigos si tu mamá lo quiere.</p><p>Y prosiguió su diario camino hacia el palacio de Su Majestad el Rey Fanerus donde cien jóvenes como él robustecían sus cuerpos en ejercicios militares y estudiaban el arte de combatir y de vencer. Eran los cien jóvenes más valientes de la ciudad. El corazón del Rey de Anatolia se alegraba cada mañana cuando veía aquellos atletas en el patio de su palacio, manejando el arco y la espada, montando los nerviosos corceles de guerra y aprendiendo de viejos generales las técnicas de combate.</p><p>Al llegar al palacio, Juan pensó que Dios había puesto en su camino a ese niño. Y raros presentimientos nacieron en su alma de joven.</p><p>Al día siguiente el niño lo esperó de pie, apoyado en el rústico portón de su casa y por todo saludo le dijo:</p><p>-Mamá dice que puedo ser tu amigo -y la madre que espiaba desde una ventana sonrió llena de dicha mientras su hijo corría al encuentro de su amigo. Juan le dio la mano y de este modo se dirigieron ambos hacia el reluciente palacio del Rey Fanerus.</p><p>Juan marchaba erguido dejando adivinar bajo su blanca túnica de cruzado el amplio pecho y los fornidos brazos. El viento frío de la mañana echaba atrás su ensortijado cabello negro.</p><p>Jorge caminaba presuroso duplicando sus pasos y levantando con frecuencia la rubia cabeza para medir con los ojos el robusto cuerpo del guerrero. A su lado parecía aun más pequeño de lo que era. Pero sintiéndose infinitamente importante por acompañar a un soldado del Rey, deseaba en el secreto de su corazón que todas las puertas y ventanas de Anatolia se abrieran para verlo pasar.</p><p>Habían caminado así unos cien pasos cuando el niño cayó en la cuenta de que ambos marchaban en silencio. Su pecho estallaba de dicha. Todas las cosas comenzaron a parecerles nuevas y en su alma de niño nacieron la seguridad y la fuerza.</p><p>Tenía ahora la certidumbre de que al lado de aquel guerrero lo podía todo.</p><p>Descubrió que ahora al lado de aquel guerrero no tenía miedo a nada.</p><p>Y de improviso mientras andaban, una impetuosa súplica le salió del corazón y floreció en sus pequeños labios:</p><p>JUAN: ENSÉÑAME A SER HOMBRE.</p><p>Juan se detuvo extrañado ante estas inesperadas palabras y Jorge quedó mirándolo como quien contempla a un gigante.</p></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p2">←<span class="w"> Anterior</span></a><span class="nj-c">3 de 29</span><a class="nj-btn pri" href="#p4">Siguiente →</a></nav></section><section class="nj-step" id="p4"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p3">←<span class="w"> Anterior</span></a><span class="nj-c">4 de 29</span><a class="nj-btn pri" href="#p5">Siguiente →</a></nav><div class="nj-body"><h2>Sole y Juampi: «Comienza una aventura»</h2><div class="pl-txt ">Un matrimonio joven cuenta cómo se conocieron, cómo fue el noviazgo y qué dudas tuvieron. Miralo pensando: ¿qué te gustaría preguntarle a los adultos de tu vida?</div><a class="nj-yt" href="https://www.youtube.com/watch?v=dRofPU6NYg8"><img src="https://img.youtube.com/vi/dRofPU6NYg8/hqdefault.jpg" alt="Video de YouTube"><span>▶</span></a><div class="pl-txt "><b>¿No podés ver el video? Esto es lo que cuentan:</b>
+Juampi y Sole se conocieron en un cumpleaños. Ninguno de los dos buscaba algo serio, pero de a poco se fueron eligiendo: a ella le llegó que él la cuidara y fuera atento; a él, que con ella podía conversar.
+Venían de familias muy distintas, y a las dos familias les costó aceptarlo. Fueron cinco años de noviazgo: cortaron varias veces, por miedo a que no funcionara.
+Cuando él le propuso casarse, ella le pidió dos cosas: que terminara la carrera y que decidiera qué fe iba a tener. Él se bautizó, y eso también le renovó la fe a ella.
+Ya casados, descubrieron lo distintos que son y tuvieron que aprender a entenderse. Se casaron con miedos (a fracasar, a lo que decían los demás), pero con ganas de formar una familia juntos.</div><p><a class="pl-open" href="https://www.youtube.com/watch?v=dRofPU6NYg8">▶ Abrir el video</a></p></div><nav class="nj-nav"><a class="nj-btn" href="#p3">←<span class="w"> Anterior</span></a><span class="nj-c">4 de 29</span><a class="nj-btn pri" href="#p5">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p5"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p4">←<span class="w"> Anterior</span></a><span class="nj-c">5 de 29</span><a class="nj-btn pri" href="#p6">Siguiente →</a></nav><div class="nj-body"><h2>Lo que dice la ciencia</h2><div class="pl-txt ">Un estudio que siguió a <b>más de 12.000 adolescentes</b> encontró que los chicos que se sienten <b>conectados con su familia</b> (queridos, escuchados, tenidos en cuenta) están más protegidos frente a casi todos los riesgos que se estudiaron: problemas emocionales, violencia, consumo de alcohol y drogas, e inicio sexual temprano.
+
+Y otras investigaciones sobre cómo los chicos superan momentos difíciles muestran que lo que más ayuda es <b>tener al menos un adulto estable y cercano</b>: puede ser mamá o papá, pero también una abuela, un tío, un profe o un catequista.
+
+<i>Fuentes: Resnick y otros (1997), «Protecting adolescents from harm», JAMA 278(10). Centro para el Niño en Desarrollo, Universidad de Harvard (2015), Working Paper 13 sobre resiliencia.</i></div></div><nav class="nj-nav"><a class="nj-btn" href="#p4">←<span class="w"> Anterior</span></a><span class="nj-c">5 de 29</span><a class="nj-btn pri" href="#p6">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p6"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p5">←<span class="w"> Anterior</span></a><span class="nj-c">6 de 29</span><a class="nj-btn pri" href="#p7">Siguiente →</a></nav><div class="nj-body"><h2>2. Pensemos</h2><div class="pl-txt ">Algunas preguntas para <b>pensar</b> y <b>reflexionar</b>.</div></div><nav class="nj-nav"><a class="nj-btn" href="#p5">←<span class="w"> Anterior</span></a><span class="nj-c">6 de 29</span><a class="nj-btn pri" href="#p7">Siguiente →</a></nav></section><section class="nj-step center" id="p7"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p6">←<span class="w"> Anterior</span></a><span class="nj-c">7 de 29</span><a class="nj-btn pri" href="#p8">Siguiente →</a></nav><div class="nj-body"><h2>Sobre la lectura</h2><div class="pl-q ic-blue" data-ic="?">Juan dice que no pueden ser amigos porque hay mucha diferencia de edad. ¿Qué creés que cambió para que aceptara?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p6">←<span class="w"> Anterior</span></a><span class="nj-c">7 de 29</span><a class="nj-btn pri" href="#p8">Siguiente →</a></nav></section><section class="nj-step center" id="p8"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p7">←<span class="w"> Anterior</span></a><span class="nj-c">8 de 29</span><a class="nj-btn pri" href="#p9">Siguiente →</a></nav><div class="nj-body"><h2>Sobre la lectura</h2><div class="pl-q ic-blue" data-ic="?">¿Por qué Jorge se animó a pedirle eso a Juan y no a otra persona? ¿Qué tiene que tener alguien para que te animes a pedirle algo así?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p7">←<span class="w"> Anterior</span></a><span class="nj-c">8 de 29</span><a class="nj-btn pri" href="#p9">Siguiente →</a></nav></section><section class="nj-step center" id="p9"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p8">←<span class="w"> Anterior</span></a><span class="nj-c">9 de 29</span><a class="nj-btn pri" href="#p10">Siguiente →</a></nav><div class="nj-body"><h2>Sobre la lectura</h2><div class="pl-q ic-blue" data-ic="?">La mamá observa desde la ventana y sonríe cuando su hijo corre al encuentro de Juan. ¿Qué te dice eso sobre la confianza entre los adultos y los chicos?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p8">←<span class="w"> Anterior</span></a><span class="nj-c">9 de 29</span><a class="nj-btn pri" href="#p10">Siguiente →</a></nav></section><section class="nj-step center" id="p10"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p9">←<span class="w"> Anterior</span></a><span class="nj-c">10 de 29</span><a class="nj-btn pri" href="#p11">Siguiente →</a></nav><div class="nj-body"><h2>Sobre la lectura</h2><div class="pl-q ic-blue" data-ic="?">Jorge se siente fuerte y sin miedo caminando al lado de Juan, aunque no hablen. ¿Con quién te pasa algo parecido?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p9">←<span class="w"> Anterior</span></a><span class="nj-c">10 de 29</span><a class="nj-btn pri" href="#p11">Siguiente →</a></nav></section><section class="nj-step center" id="p11"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p10">←<span class="w"> Anterior</span></a><span class="nj-c">11 de 29</span><a class="nj-btn pri" href="#p12">Siguiente →</a></nav><div class="nj-body"><h2>Sobre el video</h2><div class="pl-q ic-blue" data-ic="?">Sole y Juampi cuentan dudas, miedos y diferencias que tuvieron. ¿Qué te sorprende de que los adultos hablen de esas cosas?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p10">←<span class="w"> Anterior</span></a><span class="nj-c">11 de 29</span><a class="nj-btn pri" href="#p12">Siguiente →</a></nav></section><section class="nj-step center" id="p12"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p11">←<span class="w"> Anterior</span></a><span class="nj-c">12 de 29</span><a class="nj-btn pri" href="#p13">Siguiente →</a></nav><div class="nj-body"><h2>Sobre el video</h2><div class="pl-q ic-blue" data-ic="?">Al principio, a sus familias les costó aceptar el noviazgo. ¿Qué lugar te parece que tiene la familia cuando alguien elige a su pareja?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p11">←<span class="w"> Anterior</span></a><span class="nj-c">12 de 29</span><a class="nj-btn pri" href="#p13">Siguiente →</a></nav></section><section class="nj-step center" id="p13"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p12">←<span class="w"> Anterior</span></a><span class="nj-c">13 de 29</span><a class="nj-btn pri" href="#p14">Siguiente →</a></nav><div class="nj-body"><h2>Sobre el video</h2><div class="pl-q ic-blue" data-ic="?">Cortaron varias veces por miedo a que no funcionara, y aun así se siguieron eligiendo. ¿Qué creés que los ayudó?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p12">←<span class="w"> Anterior</span></a><span class="nj-c">13 de 29</span><a class="nj-btn pri" href="#p14">Siguiente →</a></nav></section><section class="nj-step center" id="p14"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p13">←<span class="w"> Anterior</span></a><span class="nj-c">14 de 29</span><a class="nj-btn pri" href="#p15">Siguiente →</a></nav><div class="nj-body"><h2>Sobre tu vida</h2><div class="pl-q ic-blue" data-ic="?">¿De qué temas se habla en tu casa o en tu grupo, y de cuáles no se habla? ¿Por qué creés que cuesta?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p13">←<span class="w"> Anterior</span></a><span class="nj-c">14 de 29</span><a class="nj-btn pri" href="#p15">Siguiente →</a></nav></section><section class="nj-step center" id="p15"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p14">←<span class="w"> Anterior</span></a><span class="nj-c">15 de 29</span><a class="nj-btn pri" href="#p16">Siguiente →</a></nav><div class="nj-body"><h2>Sobre tu vida</h2><div class="pl-q ic-blue" data-ic="?">Cuando un chico no tiene a nadie con quien hablar de lo que le pasa, ¿dónde suele buscar las respuestas? ¿Eso lo ayuda o lo perjudica?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p14">←<span class="w"> Anterior</span></a><span class="nj-c">15 de 29</span><a class="nj-btn pri" href="#p16">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p16"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p15">←<span class="w"> Anterior</span></a><span class="nj-c">16 de 29</span><a class="nj-btn pri" href="#p17">Siguiente →</a></nav><div class="nj-body"><h2>3. Los valores</h2><div class="pl-txt ">Volvé sobre la historia de Jorge y Juan, y sobre lo que contaron Sole y Juampi.</div></div><nav class="nj-nav"><a class="nj-btn" href="#p15">←<span class="w"> Anterior</span></a><span class="nj-c">16 de 29</span><a class="nj-btn pri" href="#p17">Siguiente →</a></nav></section><section class="nj-step center" id="p17"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p16">←<span class="w"> Anterior</span></a><span class="nj-c">17 de 29</span><a class="nj-btn pri" href="#p18">Siguiente →</a></nav><div class="nj-body"><h2>¿Qué valores aparecen?</h2><div class="pl-q ic-blue" data-ic="?">Marcá los que viste en la lectura y en el video.</div><div class="pl-opts"><span class="pl-opt">☐ Pedir ayuda sin vergüenza</span><span class="pl-opt">☐ Confianza</span><span class="pl-opt">☐ Escucha</span><span class="pl-opt">☐ Respeto entre generaciones</span><span class="pl-opt">☐ Responsabilidad</span><span class="pl-opt">☐ Respeto por la familia</span><span class="pl-opt">☐ Sinceridad</span><span class="pl-opt">☐ Aceptar las diferencias</span><span class="pl-opt">☐ Compromiso</span><span class="pl-opt">☐ Amistad</span></div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p16">←<span class="w"> Anterior</span></a><span class="nj-c">17 de 29</span><a class="nj-btn pri" href="#p18">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p18"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p17">←<span class="w"> Anterior</span></a><span class="nj-c">18 de 29</span><a class="nj-btn pri" href="#p19">Siguiente →</a></nav><div class="nj-body"><h2>4. Lo que quiero para mí</h2><div class="pl-txt ">Un valor es como una <b>brújula</b>: nunca se termina de cumplir, pero te marca hacia dónde querés ir.
+Una meta es un <b>paso concreto</b> en esa dirección: algo que podés hacer esta semana.</div></div><nav class="nj-nav"><a class="nj-btn" href="#p17">←<span class="w"> Anterior</span></a><span class="nj-c">18 de 29</span><a class="nj-btn pri" href="#p19">Siguiente →</a></nav></section><section class="nj-step center" id="p19"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p18">←<span class="w"> Anterior</span></a><span class="nj-c">19 de 29</span><a class="nj-btn pri" href="#p20">Siguiente →</a></nav><div class="nj-body"><h2>Lo que quiero para mí</h2><div class="pl-q ic-blue" data-ic="?">De esos valores, ¿cuál te gustaría vivir más?
+¿Qué paso concreto podrías dar esta semana para acercarte a él?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p18">←<span class="w"> Anterior</span></a><span class="nj-c">19 de 29</span><a class="nj-btn pri" href="#p20">Siguiente →</a></nav></section><section class="nj-step vcenter" id="p20"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p19">←<span class="w"> Anterior</span></a><span class="nj-c">20 de 29</span><a class="nj-btn pri" href="#p21">Siguiente →</a></nav><div class="nj-body"><h2>5. Manos a la obra</h2></div><nav class="nj-nav"><a class="nj-btn" href="#p19">←<span class="w"> Anterior</span></a><span class="nj-c">20 de 29</span><a class="nj-btn pri" href="#p21">Siguiente →</a></nav></section><section class="nj-step center" id="p21"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p20">←<span class="w"> Anterior</span></a><span class="nj-c">21 de 29</span><a class="nj-btn pri" href="#p22">Siguiente →</a></nav><div class="nj-body"><h2>Enseñame</h2><div class="pl-q ic-blue" data-ic="?">Si pudieras pedirle a alguien «enseñame», ¿a quién sería? ¿Qué le preguntarías?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p20">←<span class="w"> Anterior</span></a><span class="nj-c">21 de 29</span><a class="nj-btn pri" href="#p22">Siguiente →</a></nav></section><section class="nj-step center" id="p22"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p21">←<span class="w"> Anterior</span></a><span class="nj-c">22 de 29</span><a class="nj-btn pri" href="#p23">Siguiente →</a></nav><div class="nj-body"><h2>Una conversación</h2><div class="pl-q ic-green" data-ic="✎">Esta semana, buscá un rato para conversar con ese adulto.
+Usá las preguntas que siguen: empezá por la parte que quieras.
+Nadie te va a pedir las respuestas.</div></div><nav class="nj-nav"><a class="nj-btn" href="#p21">←<span class="w"> Anterior</span></a><span class="nj-c">22 de 29</span><a class="nj-btn pri" href="#p23">Siguiente →</a></nav></section><section class="nj-step center" id="p23"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p22">←<span class="w"> Anterior</span></a><span class="nj-c">23 de 29</span><a class="nj-btn pri" href="#p24">Siguiente →</a></nav><div class="nj-body"><h2>¿Con quién vas a conversar?</h2><div class="pl-q ic-blue" data-ic="?">Elegí con quién vas a tener la conversación.</div><div class="pl-opts"><span class="pl-opt">○ Alguien de mi familia</span><span class="pl-opt">○ Otra persona (un profe, un catequista, un vecino…)</span></div></div><nav class="nj-nav"><a class="nj-btn" href="#p22">←<span class="w"> Anterior</span></a><span class="nj-c">23 de 29</span><a class="nj-btn pri" href="#p24">Siguiente →</a></nav></section><section class="nj-step center" id="p24"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p23">←<span class="w"> Anterior</span></a><span class="nj-c">24 de 29</span><a class="nj-btn pri" href="#p25">Siguiente →</a></nav><div class="nj-body"><div class="pl-cond">Si elegiste «Alguien de mi familia»</div><h2>Su historia</h2><div class="pl-q ic-blue" data-ic="?">¿Por qué me pusieron mi nombre? ¿Cuando fue la primera vez que me viste?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p23">←<span class="w"> Anterior</span></a><span class="nj-c">24 de 29</span><a class="nj-btn pri" href="#p25">Siguiente →</a></nav></section><section class="nj-step center" id="p25"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p24">←<span class="w"> Anterior</span></a><span class="nj-c">25 de 29</span><a class="nj-btn pri" href="#p26">Siguiente →</a></nav><div class="nj-body"><div class="pl-cond">Si elegiste «Otra persona (un profe, un catequista, un vecino…)»</div><h2>Nuestra historia</h2><div class="pl-q ic-blue" data-ic="?">¿Te acordás cómo nos conocimos? ¿Cuál fue tu primera impresión de mí?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p24">←<span class="w"> Anterior</span></a><span class="nj-c">25 de 29</span><a class="nj-btn pri" href="#p26">Siguiente →</a></nav></section><section class="nj-step center" id="p26"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p25">←<span class="w"> Anterior</span></a><span class="nj-c">26 de 29</span><a class="nj-btn pri" href="#p27">Siguiente →</a></nav><div class="nj-body"><h2>Su historia</h2><div class="pl-q ic-blue" data-ic="?">Si tiene o tuvo pareja: ¿cómo se conocieron? ¿Estuvieron de novios? ¿Cuánto tiempo?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p25">←<span class="w"> Anterior</span></a><span class="nj-c">26 de 29</span><a class="nj-btn pri" href="#p27">Siguiente →</a></nav></section><section class="nj-step center" id="p27"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p26">←<span class="w"> Anterior</span></a><span class="nj-c">27 de 29</span><a class="nj-btn pri" href="#p28">Siguiente →</a></nav><div class="nj-body"><h2>Su experiencia</h2><div class="pl-q ic-blue" data-ic="?">¿Alguna vez te gustó otra persona mientras estabas en pareja?
+¿Está mal que te guste alguien, aunque no pase nada?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p26">←<span class="w"> Anterior</span></a><span class="nj-c">27 de 29</span><a class="nj-btn pri" href="#p28">Siguiente →</a></nav></section><section class="nj-step center" id="p28"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p27">←<span class="w"> Anterior</span></a><span class="nj-c">28 de 29</span><a class="nj-btn pri" href="#p29">Siguiente →</a></nav><div class="nj-body"><h2>Lo que piensa</h2><div class="pl-q ic-blue" data-ic="?">¿Está mal tener más de una pareja?
+¿Qué opinás de los adolescentes? ¿Y de los adultos? ¿Y de los abuelos?
+¿Que te parece que tiene que tener un adulto para que un adolescente lo elija como referente?
+¿Como debe ser un adolescente para dejarse guiar por ese referente? ¿Yo soy asi?</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p27">←<span class="w"> Anterior</span></a><span class="nj-c">28 de 29</span><a class="nj-btn pri" href="#p29">Siguiente →</a></nav></section><section class="nj-step center" id="p29"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p28">←<span class="w"> Anterior</span></a><span class="nj-c">29 de 29</span><a class="nj-btn pri" href="#p30">Terminar</a></nav><div class="nj-body"><h2>Algo que no vas a entregar</h2><div class="pl-q ic-red" data-ic="♥">Escribile a ese referente algo que nunca le dijiste: un gracias, un perdón, algo que te pesa o que te alegra.
+No se lo vas a dar. Es solo para vos.</div><div class="pl-ans"><div class="nj-write"></div></div></div><nav class="nj-nav"><a class="nj-btn" href="#p28">←<span class="w"> Anterior</span></a><span class="nj-c">29 de 29</span><a class="nj-btn pri" href="#p30">Terminar</a></nav></section><section class="nj-step center" id="p30"><nav class="nj-nav nj-top"><a class="nj-btn" href="#p29">←<span class="w"> Anterior</span></a><span class="nj-c">Final</span><a class="nj-btn pri" href="#inicio">Volver al inicio</a></nav><div class="nj-body nj-end"><p class="ct">¡Gracias por animarte!</p><p class="cs">Como Jorge, animate a pedir: «Enseñame».</p></div><nav class="nj-nav"><a class="nj-btn" href="#p29">←<span class="w"> Anterior</span></a><span class="nj-c">Final</span><a class="nj-btn pri" href="#inicio">Volver al inicio</a></nav></section><p class="nj-attr">Textos tomados de «Enséñame a ser hombre», de Juan Dahbar. Uso educativo.</p></div>
+<script type="application/json" id="enc-data">{"kind":"encuentro","app":"Encuentros","version":"4.1","exportedAt":1791264731967,"attr":["Textos tomados de «Enséñame a ser hombre», de Juan Dahbar. Uso educativo."],"enc":{"id":"emuw5b3msjqhe","title":"Enséñame a ser hombre","sub":"Un diálogo con mis referentes","date":"","intro":"Una propuesta de ESI para el nivel medio.","closing":{"title":"¡Gracias por animarte!","sub":"Como Jorge, animate a pedir: «Enseñame»."},"steps":[{"id":"smuw5b3mrrn1c","type":"texto","title":"Antes de empezar","body":"Este encuentro se puede hacer **solo o en grupo**.\n\nVas a leer un relato corto, ver un video de seis minutos y pensar algunas preguntas. Al final, la propuesta es animarte a **conversar con un adulto importante en tu vida**: mamá, papá, una abuela, un tío, un hermano mayor, un catequista, un profe… Cualquier persona que consideres un referente en tu vida.\n\nNinguna pregunta es obligatoria. Respondé solo lo que quieras."},{"id":"smuw5b3mr52xn","type":"texto","title":"1. Información","body":"Primero, una historia y un testimonio."},{"id":"smuw5b3mr2gm1","type":"libro","title":"«Enséñame a ser hombre»","min":10,"pre":"Capítulo I del cuento \"Enseñame a ser hombre\" de Juan Dahbar. Leelo tranquilo, o en voz alta si están en grupo.","book":{"lib":"ensename-a-ser-hombre","n":1,"pars":null,"frases":null,"m":false,"notas":false,"reveal":false},"html":"\u003cdiv class=\"bk bk-lib\" style=\"--bc:#8b3a2b\">\u003cspan class=\"bk-tag\">Enséñame a ser hombre\u003c/span>\u003cdiv class=\"bk-kick\">Capítulo I · Enséñame a ser hombre\u003c/div>\u003cdiv class=\"bk-c\">\u003cblockquote>A mis amigos que muchas veces me han pedido que les enseñe a ser hombres.\u003cspan class=\"src\">— Dedicatoria del autor\u003c/span>\u003c/blockquote>\u003cp>En ese momento Juan pasaba frente una pequeña casa, ante la cual un niño sentado en el patio, jugaba a la guerra tratando inútilmente de armar por tercera vez una pequeña torre de madera, frente a una ciudad imaginaria.\u003c/p>\u003cp>Ese niño se llamaba Jorge.\u003c/p>\u003cp>Juan, todas las mañanas al ir al palacio del Rey a sus ejercicios militares encontraba al niño jugando al frente de su casa. Pero ese día el niño dejó sus juegos y encarándose con él le dijo bruscamente:\u003c/p>\u003cp>-Quiero ser tu amigo.\u003c/p>\u003cp>-¿Mi amigo? -contestó extrañado.\u003c/p>\u003cp>-Sí, - respondió Jorge con naturalidad.\u003c/p>\u003cp>-Eso no puede ser.\u003c/p>\u003cp>-¿Por qué no puede ser?\u003c/p>\u003cp>-Porque yo tengo 25 años y tú no tienes ni siquiera 15.\u003c/p>\u003cp>-El mes que viene cumpliré los trece.\u003c/p>\u003cp>-Ya ves, demasiada diferencia.\u003c/p>\u003cp>Mas el niño con un empeño que desconcertaba prosiguió:\u003c/p>\u003cp>-Pero yo quiero ser tu amigo lo mismo. ¿Seremos amigos?- Y miró al rostro guerrero con sus azules ojos chispeantes de inocencia.\u003c/p>\u003cp>Juan no supo qué responder. Acarició con bondad la rubia cabeza del niño y le dijo con afectada seriedad:\u003c/p>\u003cp>-Bueno... seremos amigos si tu mamá lo quiere.\u003c/p>\u003cp>Y prosiguió su diario camino hacia el palacio de Su Majestad el Rey Fanerus donde cien jóvenes como él robustecían sus cuerpos en ejercicios militares y estudiaban el arte de combatir y de vencer. Eran los cien jóvenes más valientes de la ciudad. El corazón del Rey de Anatolia se alegraba cada mañana cuando veía aquellos atletas en el patio de su palacio, manejando el arco y la espada, montando los nerviosos corceles de guerra y aprendiendo de viejos generales las técnicas de combate.\u003c/p>\u003cp>Al llegar al palacio, Juan pensó que Dios había puesto en su camino a ese niño. Y raros presentimientos nacieron en su alma de joven.\u003c/p>\u003cp>Al día siguiente el niño lo esperó de pie, apoyado en el rústico portón de su casa y por todo saludo le dijo:\u003c/p>\u003cp>-Mamá dice que puedo ser tu amigo -y la madre que espiaba desde una ventana sonrió llena de dicha mientras su hijo corría al encuentro de su amigo. Juan le dio la mano y de este modo se dirigieron ambos hacia el reluciente palacio del Rey Fanerus.\u003c/p>\u003cp>Juan marchaba erguido dejando adivinar bajo su blanca túnica de cruzado el amplio pecho y los fornidos brazos. El viento frío de la mañana echaba atrás su ensortijado cabello negro.\u003c/p>\u003cp>Jorge caminaba presuroso duplicando sus pasos y levantando con frecuencia la rubia cabeza para medir con los ojos el robusto cuerpo del guerrero. A su lado parecía aun más pequeño de lo que era. Pero sintiéndose infinitamente importante por acompañar a un soldado del Rey, deseaba en el secreto de su corazón que todas las puertas y ventanas de Anatolia se abrieran para verlo pasar.\u003c/p>\u003cp>Habían caminado así unos cien pasos cuando el niño cayó en la cuenta de que ambos marchaban en silencio. Su pecho estallaba de dicha. Todas las cosas comenzaron a parecerles nuevas y en su alma de niño nacieron la seguridad y la fuerza.\u003c/p>\u003cp>Tenía ahora la certidumbre de que al lado de aquel guerrero lo podía todo.\u003c/p>\u003cp>Descubrió que ahora al lado de aquel guerrero no tenía miedo a nada.\u003c/p>\u003cp>Y de improviso mientras andaban, una impetuosa súplica le salió del corazón y floreció en sus pequeños labios:\u003c/p>\u003cp>JUAN: ENSÉÑAME A SER HOMBRE.\u003c/p>\u003cp>Juan se detuvo extrañado ante estas inesperadas palabras y Jorge quedó mirándolo como quien contempla a un gigante.\u003c/p>\u003c/div>\u003c/div>"},{"id":"smuw5b3mrbn4o","type":"video","title":"Sole y Juampi: «Comienza una aventura»","min":6,"url":"https://www.youtube.com/watch?v=dRofPU6NYg8","pre":"Un matrimonio joven cuenta cómo se conocieron, cómo fue el noviazgo y qué dudas tuvieron. Miralo pensando: ¿qué te gustaría preguntarle a los adultos de tu vida?","post":"**¿No podés ver el video? Esto es lo que cuentan:**\nJuampi y Sole se conocieron en un cumpleaños. Ninguno de los dos buscaba algo serio, pero de a poco se fueron eligiendo: a ella le llegó que él la cuidara y fuera atento; a él, que con ella podía conversar.\nVenían de familias muy distintas, y a las dos familias les costó aceptarlo. Fueron cinco años de noviazgo: cortaron varias veces, por miedo a que no funcionara.\nCuando él le propuso casarse, ella le pidió dos cosas: que terminara la carrera y que decidiera qué fe iba a tener. Él se bautizó, y eso también le renovó la fe a ella.\nYa casados, descubrieron lo distintos que son y tuvieron que aprender a entenderse. Se casaron con miedos (a fracasar, a lo que decían los demás), pero con ganas de formar una familia juntos."},{"id":"smuw5b3mriw80","type":"texto","title":"Lo que dice la ciencia","body":"Un estudio que siguió a **más de 12.000 adolescentes** encontró que los chicos que se sienten **conectados con su familia** (queridos, escuchados, tenidos en cuenta) están más protegidos frente a casi todos los riesgos que se estudiaron: problemas emocionales, violencia, consumo de alcohol y drogas, e inicio sexual temprano.\n\nY otras investigaciones sobre cómo los chicos superan momentos difíciles muestran que lo que más ayuda es **tener al menos un adulto estable y cercano**: puede ser mamá o papá, pero también una abuela, un tío, un profe o un catequista.\n\n*Fuentes: Resnick y otros (1997), «Protecting adolescents from harm», JAMA 278(10). Centro para el Niño en Desarrollo, Universidad de Harvard (2015), Working Paper 13 sobre resiliencia.*"},{"id":"smuw5b3mrh70s","type":"texto","title":"2. Pensemos","body":"Algunas preguntas para **pensar** y **reflexionar**."},{"id":"smuw5b3mrm0dr","type":"pregunta","title":"Sobre la lectura","question":"Juan dice que no pueden ser amigos porque hay mucha diferencia de edad. ¿Qué creés que cambió para que aceptara?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mr8fvz","type":"pregunta","title":"Sobre la lectura","question":"¿Por qué Jorge se animó a pedirle eso a Juan y no a otra persona? ¿Qué tiene que tener alguien para que te animes a pedirle algo así?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mrx2rb","type":"pregunta","title":"Sobre la lectura","question":"La mamá observa desde la ventana y sonríe cuando su hijo corre al encuentro de Juan. ¿Qué te dice eso sobre la confianza entre los adultos y los chicos?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mr0yp9","type":"pregunta","title":"Sobre la lectura","question":"Jorge se siente fuerte y sin miedo caminando al lado de Juan, aunque no hablen. ¿Con quién te pasa algo parecido?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mrwjx3","type":"pregunta","title":"Sobre el video","question":"Sole y Juampi cuentan dudas, miedos y diferencias que tuvieron. ¿Qué te sorprende de que los adultos hablen de esas cosas?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw701orjsn5","type":"pregunta","title":"Sobre el video","question":"Al principio, a sus familias les costó aceptar el noviazgo. ¿Qué lugar te parece que tiene la familia cuando alguien elige a su pareja?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw701or9sok","type":"pregunta","title":"Sobre el video","question":"Cortaron varias veces por miedo a que no funcionara, y aun así se siguieron eligiendo. ¿Qué creés que los ayudó?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mraofd","type":"pregunta","title":"Sobre tu vida","question":"¿De qué temas se habla en tu casa o en tu grupo, y de cuáles no se habla? ¿Por qué creés que cuesta?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3mrqrf2","type":"pregunta","title":"Sobre tu vida","question":"Cuando un chico no tiene a nadie con quien hablar de lo que le pasa, ¿dónde suele buscar las respuestas? ¿Eso lo ayuda o lo perjudica?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3ms36lj","type":"texto","title":"3. Los valores","body":"Volvé sobre la historia de Jorge y Juan, y sobre lo que contaron Sole y Juampi."},{"id":"smuw5b3msg9gr","type":"pregunta","title":"¿Qué valores aparecen?","question":"Marcá los que viste en la lectura y en el video.","write":"guardar","writeHint":"¿Viste algún otro? ¿En qué momento lo viste?","opciones":"Pedir ayuda sin vergüenza\nConfianza\nEscucha\nRespeto entre generaciones\nResponsabilidad\nRespeto por la familia\nSinceridad\nAceptar las diferencias\nCompromiso\nAmistad"},{"id":"smuw5b3msjdyb","type":"texto","title":"4. Lo que quiero para mí","body":"Un valor es como una **brújula**: nunca se termina de cumplir, pero te marca hacia dónde querés ir.\nUna meta es un **paso concreto** en esa dirección: algo que podés hacer esta semana."},{"id":"smuw5b3msmygt","type":"pregunta","title":"Lo que quiero para mí","question":"De esos valores, ¿cuál te gustaría vivir más?\n¿Qué paso concreto podrías dar esta semana para acercarte a él?","write":"guardar","writeHint":"Si querés, anotá lo que pensás…"},{"id":"smuw5b3msfsfk","type":"texto","title":"5. Manos a la obra","body":""},{"id":"smuw5b3msb3ld","type":"pregunta","title":"Enseñame","question":"Si pudieras pedirle a alguien «enseñame», ¿a quién sería? ¿Qué le preguntarías?","write":"guardar","writeHint":"Pienso en… Le preguntaría..."},{"id":"smuw5b3msngoe","type":"pregunta","icon":"tarea","title":"Una conversación","question":"Esta semana, buscá un rato para conversar con ese adulto.\nUsá las preguntas que siguen: empezá por la parte que quieras.\nNadie te va a pedir las respuestas."},{"id":"smuw6q6m330rd","type":"pregunta","title":"¿Con quién vas a conversar?","question":"Elegí con quién vas a tener la conversación.","opciones":"Alguien de mi familia\nOtra persona (un profe, un catequista, un vecino…)","unica":true},{"id":"smuw5b3mselqi","type":"pregunta","title":"Su historia","question":"¿Por qué me pusieron mi nombre? ¿Cuando fue la primera vez que me viste?","write":"guardar","writeHint":"Si querés, anotá lo que te contó…","cond":{"step":"smuw6q6m330rd","val":"Alguien de mi familia"}},{"id":"smuw6q6m3to35","type":"pregunta","title":"Nuestra historia","question":"¿Te acordás cómo nos conocimos? ¿Cuál fue tu primera impresión de mí?","write":"guardar","writeHint":"Si querés, anotá lo que te contó…","cond":{"step":"smuw6q6m330rd","val":"Otra persona (un profe, un catequista, un vecino…)"}},{"id":"smuw7tgm0j2en","type":"pregunta","title":"Su historia","question":"Si tiene o tuvo pareja: ¿cómo se conocieron? ¿Estuvieron de novios? ¿Cuánto tiempo?","write":"guardar","writeHint":"Si querés, anotá lo que te contó…"},{"id":"smuw5b3ms6l78","type":"pregunta","title":"Su experiencia","question":"¿Alguna vez te gustó otra persona mientras estabas en pareja?\n¿Está mal que te guste alguien, aunque no pase nada?","write":"guardar","writeHint":"Si querés, anotá lo que te contó…"},{"id":"smuw5b3msmshi","type":"pregunta","title":"Lo que piensa","question":"¿Está mal tener más de una pareja?\n¿Qué opinás de los adolescentes? ¿Y de los adultos? ¿Y de los abuelos?\n¿Que te parece que tiene que tener un adulto para que un adolescente lo elija como referente?\n¿Como debe ser un adolescente para dejarse guiar por ese referente? ¿Yo soy asi?","write":"guardar","writeHint":"Si querés, anotá lo que te contó…"},{"id":"smuw5b3msme3i","type":"pregunta","icon":"corazon","title":"Algo que no vas a entregar","question":"Escribile a ese referente algo que nunca le dijiste: un gracias, un perdón, algo que te pesa o que te alegra.\nNo se lo vas a dar. Es solo para vos.","write":"guardar","writeHint":"Querido/a…"}],"created":1791258913828,"updated":1791263593568},"pub":true}</script>
+<script>
+(function(){
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // texto propio: se respeta el renglón; **negrita** y *cursiva*
+  function fmt(t){
+    return esc(t || '')
+      .replace(/\*\*([^*\n][\s\S]*?)\*\*/g, '<b>$1</b>')
+      .replace(/(^|[^*\w])\*(?![\s*])([^*\n]+?)\*(?!\*)/g, '$1<i>$2</i>');
+  }
+  const has = t => t != null && String(t).trim() !== '';
+  function zone(t, align, cls){
+    if (!has(t)) return '';
+    const st = align && align !== 'left' ? ` style="text-align:${align === 'justify' ? 'justify;hyphens:auto' : align}"` : '';
+    return `<div class="pl-txt ${cls||''}"${st}>${fmt(t)}</div>`;
+  }
+  function ytInfo(u){
+    const m = String(u).match(/(?:youtube(?:-nocookie)?\.com\/(?:watch\?(?:[^#]*&)?v=|embed\/|shorts\/|live\/|v\/)|youtu\.be\/)([\w-]{11})/);
+    if (!m) return null;
+    const t = String(u).match(/[?&#](?:t|start)=(\d+(?:h)?\d*(?:m)?\d*s?)/);
+    let start = 0;
+    if (t) { const v = t[1]; if (/^\d+$/.test(v)) start = +v; else { const h=/(\d+)h/.exec(v), mi=/(\d+)m/.exec(v), s=/(\d+)s/.exec(v); start = (h?+h[1]*3600:0)+(mi?+mi[1]*60:0)+(s?+s[1]:0); } }
+    return {id:m[1], start};
+  }
+  const driveId = u => (String(u).match(/drive\.google\.com\/(?:file\/d\/|open\?id=|uc\?(?:[^#]*&)?id=)([\w-]{10,})/) || [])[1];
+  function videoHtml(url, src){
+    if (src) return `<video controls preload="metadata" playsinline src="${esc(src)}"></video>`;
+    if (!has(url)) return '';
+    const yt = ytInfo(url);
+    if (yt) return `<div class="pl-frame"><iframe src="https://www.youtube-nocookie.com/embed/${yt.id}?rel=0${yt.start?'&start='+yt.start:''}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;
+    const vm = String(url).match(/vimeo\.com\/(?:video\/)?(\d+)/);
+    if (vm) return `<div class="pl-frame"><iframe src="https://player.vimeo.com/video/${vm[1]}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe></div>`;
+    const dr = driveId(url);
+    if (dr) return `<div class="pl-frame"><iframe src="https://drive.google.com/file/d/${dr}/preview" allow="autoplay; fullscreen" allowfullscreen></iframe></div>`;
+    return `<video controls preload="metadata" playsinline src="${esc(url)}"></video>`;
+  }
+  function imgUrl(u){ const d = driveId(u); return d ? `https://drive.google.com/thumbnail?id=${d}&sz=w2000` : u; }
+  function pdfUrl(u){ const d = driveId(u); return d ? `https://drive.google.com/file/d/${d}/preview` : u; }
+  const KIND = {texto:'', pregunta:'', proposito:'Propósito', youcat:'', yconf:'', enciclica:'', estilo:'', libro:'', imagen:'', video:'', pdf:'', audio:'', enlace:''};
+
+  // ícono del cuadro destacado (paso «Pregunta»): símbolo, color y nombre
+  const QICONS = {
+    pregunta:{ch:'?', c:'blue', l:'Pregunta'}, aviso:{ch:'!', c:'warm', l:'Aviso'}, info:{ch:'i', c:'blue', l:'Información'},
+    idea:{ch:'💡', c:'warm', l:'Idea'}, oracion:{ch:'✝', c:'purple', l:'Oración'}, cita:{ch:'❝', c:'purple', l:'Cita'},
+    tarea:{ch:'✎', c:'green', l:'Tarea'}, tiempo:{ch:'⏱', c:'green', l:'Tiempo'}, objetivo:{ch:'◎', c:'green', l:'Objetivo'},
+    corazon:{ch:'♥', c:'red', l:'Corazón'}, estrella:{ch:'★', c:'warm', l:'Destacado'}, importante:{ch:'‼', c:'red', l:'Importante'},
+    ninguno:{ch:'', c:'none', l:'Sin ícono'}
+  };
+  // HTML de un paso (lo usan el presentador y el guion para imprimir)
+  function stepHtml(s, ctx){
+    ctx = ctx || {};
+    const src = s.file && ctx.src ? ctx.src(s.file) : '';
+    const al = s.align, pr = ctx.print;
+    let h = '';
+    // paso que depende de una opción elegida antes: en las versiones sin elección (papel, sin JavaScript) se avisa para quién es
+    if (pr || ctx.flat) for (const c of [s.gcond, s.cond]) if (c && c.step) h += `<div class="pl-cond">Si elegiste «${esc(c.val)}»</div>`;
+    if (has(s.title)) h += `<h2>${fmt(s.title)}</h2>`;
+    else if (KIND[s.type]) h += `<div class="pl-kind">${KIND[s.type]}</div>`;
+    const pre = zone(s.pre, al), post = zone(s.post, al);
+    switch (s.type) {
+      case 'texto': h += zone(s.body, al) || (pr ? '' : ''); break;
+      case 'pregunta': {
+        const ic = QICONS[s.icon] || QICONS.pregunta;
+        h += pre + (has(s.question) ? `<div class="pl-q ic-${ic.c}" data-ic="${esc(ic.ch)}">${fmt(s.question)}</div>` : '') + askHtml(s, ctx) + post; break;
+      }
+      case 'proposito': {
+        const ans = (ctx.answers && ctx.answers[s.id]) || '';
+        h += `<div class="pl-prop">${zone(s.body || 'Mi propósito:', al)}` +
+          (pr ? `<div style="min-height:5em;border-bottom:1px solid #999"></div>` :
+          `<textarea data-ans="${esc(s.id)}" placeholder="Escribí acá tu propósito…">${esc(ans)}</textarea><div class="saved" data-saved="${esc(s.id)}"></div>`) + `</div>`;
+        break;
+      }
+      case 'imagen': {
+        const u = src || imgUrl(s.url || '');
+        h += pre + (has(u) ? `<div class="pl-media"><img src="${esc(u)}" alt="${esc(s.title || (s.file && s.file.name) || 'Imagen')}" data-zoom></div>` : '') + post;
+        break;
+      }
+      case 'video':
+        h += pre;
+        if (pr) h += `<div class="pl-missing">🎬 Video: ${esc(s.file ? s.file.name : s.url)}</div>`;
+        else if (src || has(s.url)) h += `<div class="pl-media">${videoHtml(s.url, src)}</div>`;
+        h += post; break;
+      case 'audio':
+        h += pre;
+        if (pr) h += `<div class="pl-missing">🔊 Audio: ${esc(s.file ? s.file.name : s.url)}</div>`;
+        else if (src || has(s.url)) h += `<div class="pl-media"><audio controls preload="metadata" src="${esc(src || s.url)}"></audio></div>`;
+        h += post; break;
+      case 'pdf': {
+        const u = src || pdfUrl(s.url || '');
+        h += pre;
+        if (pr) h += `<div class="pl-missing">📄 PDF: ${esc(s.file ? s.file.name : s.url)}</div>`;
+        else if (has(u)) h += `<div class="pl-media"><iframe class="pl-pdf" src="${esc(u)}" title="PDF"></iframe><a class="pl-open" href="${esc(u)}" target="_blank" rel="noopener"${s.file ? ` download="${esc(s.file.name)}"` : ''}>📄 Abrir el PDF${s.file ? ' (' + esc(s.file.name) + ')' : ''}</a></div>`;
+        h += post; break;
+      }
+      case 'enlace':
+        h += pre + (has(s.url) ? `<a class="pl-link" href="${esc(s.url)}" target="_blank" rel="noopener">🔗 <span><b>${esc(s.body || s.url)}</b>${has(s.body) ? `<br><small>${esc(s.url)}</small>` : ''}</span></a>` : '') + post;
+        break;
+      case 'youcat': case 'yconf': case 'enciclica': case 'estilo': case 'libro':
+        h += pre + (ctx.book ? ctx.book(s) : (s.html || '<div class="pl-missing">Texto no disponible</div>')) + post;
+        break;
+    }
+    if (ctx.notes && has(s.nota)) h += `<div class="pl-note"><b>Nota para el disertante</b>${fmt(s.nota)}</div>`;
+    return h;
+  }
+  // paso «Pregunta»: opciones para marcar y caja para escribir (guardada en el dispositivo, o privada: no se guarda)
+  const optList = s => String(s.opciones || '').split('\n').map(x => x.trim()).filter(Boolean);
+  function askHtml(s, ctx){
+    const A = ctx.answers || {}, ops = optList(s);
+    let h = '';
+    if (ops.length) {
+      const sel = A[s.id + ':o'] || [];
+      if (s.unica && !ctx.print && !ctx.flat) h += `<div class="pl-unica">Elegí una opción</div>`;
+      h += `<div class="pl-opts">` + ops.map(o => ctx.print || ctx.flat ? `<span class="pl-opt">${s.unica ? '○' : '☐'} ${esc(o)}</span>`
+        : `<button type="button" class="pl-opt${sel.includes(o) ? ' on' : ''}" data-opt="${esc(s.id)}" data-v="${esc(o)}">${esc(o)}</button>`).join('') + `</div>`;
+    }
+    const w = s.write || (ctx.hoja ? 'guardar' : '');
+    if (w) {
+      const ph = has(s.writeHint) ? s.writeHint : 'Escribí acá…';
+      if (ctx.print) h += `<div style="min-height:5em;border-bottom:1px solid #999"></div>`;
+      else if (w === 'privado') h += `<div class="pl-ans priv"><textarea data-priv placeholder="${esc(ph)}"></textarea><div class="pl-priv">🔒 Esto no se guarda en ningún lado: cuando pasás de paso, se borra. Nadie lo va a leer.</div></div>`;
+      else h += `<div class="pl-ans"><textarea data-ans="${esc(s.id)}" placeholder="${esc(ph)}">${esc(A[s.id] || '')}</textarea><div class="saved" data-saved="${esc(s.id)}"></div></div>`;
+    }
+    return h;
+  }
+  // ¿el encuentro tiene lugares para escribir o marcar? (para el aviso de privacidad de la portada)
+  const writes = e => e.steps.some(s => s.type === 'proposito' || (s.type === 'pregunta' && (s.write === 'guardar' || optList(s).length)));
+  // preguntas de la «hoja de preguntas» (las que sirven para anotar: no los avisos ni las citas)
+  const hojaSteps = e => e.steps.filter(s => s.type === 'proposito' || (s.type === 'pregunta' && (!s.icon || s.icon === 'pregunta' || s.icon === 'tarea' || s.write || optList(s).length)));
+
+  let P = null;
+  const store = {
+    get(k){ try { return JSON.parse(localStorage.getItem(k) || 'null'); } catch(e){ return null; } },
+    set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+  };
+  function prefs(){ return Object.assign({size:21, sizeM:18, dark:null}, store.get('enc-presentador') || {}); }
+  function savePrefs(p){ store.set('enc-presentador', p); }
+
+  function open(enc, opts){
+    close(true);
+    opts = opts || {};
+    const root = document.createElement('div');
+    root.className = 'pl';
+    root.setAttribute('role', 'dialog');
+    root.setAttribute('aria-label', enc.title || 'Encuentro');
+    document.body.appendChild(root);
+    const prog = Object.assign({i:-1, answers:{}, muted:false}, store.get(opts.storageKey) || {});
+    P = {enc, opts, root, prog, i:-1, notes:!!opts.notes, music:null, seen:new Set(), warned:null, notesOpen:new Set()};
+    const pf = prefs();
+    if (pf.dark == null) pf.dark = !!(window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) || !!opts.dark;
+    applyPrefs(pf);
+    if (!opts.embedded) document.documentElement.style.overflow = 'hidden';
+    root.addEventListener('click', onClick);
+    root.addEventListener('input', onInput);
+    document.addEventListener('keydown', onKey);
+    for (const t of ['mousemove', 'pointerdown', 'keydown', 'focusin']) document.addEventListener(t, poke, true);
+    poke();
+    document.addEventListener('fullscreenchange', renderTop);
+    if (typeof opts.start === 'number') go(opts.start); else render();
+  }
+  function applyPrefs(pf){
+    P.pf = pf;
+    P.root.classList.toggle('dark', !!pf.dark);
+    P.root.style.setProperty('--pl-size', pf.size + 'px');
+    P.root.style.setProperty('--pl-size-m', pf.sizeM + 'px');
+    savePrefs(pf);
+  }
+  function close(silent){
+    if (!P) return;
+    stopMusic();
+    if (document.fullscreenElement) document.exitFullscreen().catch(()=>{});
+    document.removeEventListener('keydown', onKey);
+    for (const t of ['mousemove', 'pointerdown', 'keydown', 'focusin']) document.removeEventListener(t, poke, true);
+    clearTimeout(P.idleT);
+    document.removeEventListener('fullscreenchange', renderTop);
+    P.root.remove();
+    document.documentElement.style.overflow = '';
+    const cb = P.opts.onClose; P = null;
+    if (!silent && cb) cb();
+  }
+  const n = () => P.enc.steps.length;
+  // pasos con condición («solo si en el paso X eligieron Y»): mientras no se eligió nada, se muestran todos
+  function okCond(c){
+    if (!c || !c.step) return true;
+    const a = P.prog.answers[c.step + ':o'];
+    return !a || !a.length || a.includes(c.val);
+  }
+  const vis = s => !s || (okCond(s.cond) && okCond(s.gcond));
+  function stepFrom(i, d){ let j = i + d; while (j >= 0 && j < n() && !vis(P.enc.steps[j])) j += d; return j; }
+  function saveProg(){ if (P.opts.storageKey) store.set(P.opts.storageKey, {i:P.prog.i, answers:P.prog.answers, muted:P.prog.muted, done:P.prog.done}); }
+  function go(i){
+    i = Math.max(-1, Math.min(n(), i));
+    P.i = i;
+    if (i >= 0) { P.prog.i = Math.min(i, n() - 1); if (i === n()) P.prog.done = true; saveProg(); }
+    if (i >= 0) startMusic();
+    render();
+    const m = P.root.querySelector('.pl-main'); if (m) m.scrollTop = 0;
+  }
+  function renderTop(){
+    if (!P) return;
+    const t = P.root.querySelector('.pl-top'); if (!t) return;
+    const anyNotes = P.enc.steps.some(s => has(s.nota));
+    const curHasNote = P.i >= 0 && P.i < n() && has(P.enc.steps[P.i].nota);
+    const fs = !!document.fullscreenElement;
+    t.innerHTML = `<span class="ttl">${esc(P.enc.title || 'Encuentro')}</span>` +
+      (P.musicSrc ? `<button class="pl-ib" data-a="mute" title="Música de fondo">${P.prog.muted ? '🔇' : '🎵'}</button>` : '') +
+      (anyNotes && P.opts.allowNotes !== false ? `<button class="pl-ib${noteHere() ? ' on' : (curHasNote ? ' has' : '')}" data-a="notes"${curHasNote ? '' : ' disabled'} title="${!curHasNote ? 'Este paso no tiene nota' : noteHere() ? 'Ocultar la nota de este paso' : 'Este paso tiene una nota para vos — tocá para verla'}">📝 Nota</button>` : '') +
+      `<button class="pl-ib" data-a="zout" title="Letra más chica">A−</button><button class="pl-ib" data-a="zin" title="Letra más grande">A+</button>` +
+      `<button class="pl-ib" data-a="dark" title="Modo noche">${P.pf.dark ? '☀' : '🌙'}</button>` +
+      (document.fullscreenEnabled ? `<button class="pl-ib" data-a="fs" title="${fs ? 'Salir de pantalla completa' : 'Pantalla completa'}">${fs ? '🗗' : '⛶'}</button>` : '') +
+      (P.opts.closable !== false ? `<button class="pl-ib" data-a="close" title="Cerrar (Esc)">✕</button>` : '');
+  }
+  function render(){
+    const i = P.i, N = n();
+    let body;
+    if (P.hoja) {
+      P.root.innerHTML = `<div class="pl-top"></div><div class="pl-main">${hojaHtml()}</div>`;
+      renderTop(); updateMusic(); return;
+    }
+    if (i < 0) body = coverHtml();
+    else if (i >= N) body = closingHtml();
+    else body = `<div class="pl-step${({pregunta:' pl-center', texto:' pl-vcenter'})[P.enc.steps[i].type] || ''}">${stepHtml(P.enc.steps[i], {src:P.opts.src, book:P.opts.book, answers:P.prog.answers, notes:noteHere()})}</div>`;
+    const V = P.enc.steps.filter(vis), pos = i >= N ? V.length : V.indexOf(P.enc.steps[i]) + 1, last = i < N && stepFrom(i, 1) >= N;
+    const pct = V.length ? Math.round(Math.max(0, Math.min(pos, V.length)) / V.length * 100) : 0;
+    const nav = i < 0 ? '' : `<div class="pl-nav">
+      <button class="pl-btn" data-a="prev">← Anterior</button>
+      <div class="pl-prog"><div class="pl-bar"><div style="width:${pct}%"></div></div><span class="pl-count">${i >= N ? 'Final' : pos + ' de ' + V.length}</span></div>
+      ${i >= N ? `<button class="pl-btn pri" data-a="finish">${P.opts.closable !== false ? 'Cerrar ✕' : 'Salir'}</button>` : `<button class="pl-btn pri${unreadNote() ? ' notedot' : ''}" data-a="next" ${unreadNote() ? 'title="Este paso tiene una nota que todavía no viste"' : ''}>${last ? 'Terminar' : 'Siguiente →'}</button>`}
+    </div>`;
+    if (noteHere() && has(P.enc.steps[i].nota)) P.seen.add(P.enc.steps[i].id);
+    P.root.innerHTML = `<div class="pl-top"></div><div class="pl-main">${body}</div>${nav}`;
+    renderTop();
+    updateMusic();
+  }
+  // salir al terminar: en la herramienta cierra el presentador; en el archivo exportado intenta cerrar la pestaña
+  function finish(){
+    if (P.opts.closable !== false) { close(); return; }
+    stopMusic();
+    try { window.close(); } catch(e){}
+    P.i = -2;      // si el navegador no deja cerrar la pestaña, queda una pantalla de despedida
+    P.root.innerHTML = `<div class="pl-main"><div class="pl-cover"><h1>Encuentro terminado</h1><p class="csub">Ya podés cerrar esta pestaña.</p><br><button class="pl-btn" data-a="home">Volver al inicio del encuentro</button></div></div>`;
+  }
+  // notas para el catequista: ¿el paso actual tiene una que todavía no se vio?
+  // la nota se abre por paso: abrirla en uno no la abre en los demás
+  function noteHere(){ const s = P.enc.steps[P.i]; return !!(s && P.notesOpen.has(s.id)); }
+  function unreadNote(){
+    const s = P.enc.steps[P.i];
+    return !!(s && has(s.nota) && P.opts.allowNotes !== false && !noteHere() && !P.seen.has(s.id));
+  }
+  // al querer pasar de paso sin haber visto la nota: un aviso (la segunda vez ya deja pasar)
+  function warnNote(){
+    if (!unreadNote()) return false;
+    const s = P.enc.steps[P.i];
+    if (P.warned === s.id) return false;
+    P.warned = s.id;
+    const nav = P.root.querySelector('.pl-nav'); if (!nav) return false;
+    nav.insertAdjacentHTML('beforeend', `<div class="pl-warn" role="alert">📝 <b>Este paso tiene una nota para vos</b> y todavía no la viste.<div class="acts"><button class="pl-btn" data-a="next">Seguir igual</button><button class="pl-btn pri" data-a="notes">Ver la nota</button></div></div>`);
+    return true;
+  }
+  // barras que se esconden solas: cualquier movimiento del mouse, toque o tecla las vuelve a mostrar
+  const IDLE_MS = 3000;
+  function poke(){
+    if (!P) return;
+    P.root.classList.remove('idle');
+    clearTimeout(P.idleT);
+    P.idleT = setTimeout(goIdle, IDLE_MS);
+  }
+  function goIdle(){
+    if (!P) return;
+    // no esconder si el mouse está sobre una barra, si hay un aviso abierto o si se está escribiendo
+    if (P.root.querySelector('.pl-top:hover, .pl-nav:hover, .pl-warn') || (document.activeElement && document.activeElement.closest('.pl textarea, .pl input'))) { P.idleT = setTimeout(goIdle, IDLE_MS); return; }
+    P.root.classList.add('idle');
+  }
+  function coverHtml(){
+    const e = P.enc, N = n();
+    const mins = e.steps.reduce((a, s) => a + (+s.min || 0), 0);
+    const resume = P.prog.i > 0 && P.prog.i < N && !P.prog.done;
+    return `<div class="pl-cover">
+      <div class="eyebrow">Encuentro</div>
+      <h1>${fmt(e.title || 'Encuentro')}</h1>
+      ${has(e.sub) ? `<p class="csub">${fmt(e.sub)}</p>` : ''}
+      ${has(e.date) ? `<p class="csub" style="font-size:.85em">${esc(fmtDate(e.date))}</p>` : ''}
+      ${has(e.intro) ? `<div class="cgoal">${fmt(e.intro)}</div>` : ''}
+      <div class="cmeta">${N} paso${N !== 1 ? 's' : ''}${mins ? ' · unos ' + mins + ' minutos' : ''}</div>
+      ${N ? (resume ? `<button class="pl-btn pri" data-a="resume">Continuar (paso ${P.prog.i + 1})</button><br><button class="pl-btn" data-a="start">Empezar de nuevo</button>`
+                    : `<button class="pl-btn pri" data-a="start">${P.prog.done ? 'Volver a recorrerlo' : 'Comenzar'}</button>`)
+           : `<p class="pl-missing">Este encuentro todavía no tiene pasos.</p>`}
+      ${hojaSteps(e).length >= 2 ? `<br><button class="pl-btn lite" data-a="hoja">📝 Solo las preguntas (para anotar o imprimir)</button>` : ''}
+      ${writes(e) ? privHtml() : ''}
+      ${P.opts.footer ?`<div style="margin-top:3em;font-size:.6em;color:var(--pl-muted)">${P.opts.footer}</div>` : ''}
+    </div>`;
+  }
+  const anyAnswer = () => Object.values(P.prog.answers || {}).some(v => Array.isArray(v) ? v.length : has(v));
+  function privHtml(){
+    return `<p class="cpriv">🔒 Lo que escribas o marques queda guardado <b>solo en este dispositivo</b>: no se envía a ningún lado y nadie más lo puede leer.` +
+      (anyAnswer() ? `<br><button class="pl-ib" data-a="wipe">🗑 Borrar lo que escribí</button>` : '') + `</p>`;
+  }
+  // hoja de preguntas: todas juntas, con lugar para anotar; se puede imprimir
+  function hojaHtml(){
+    const e = P.enc;
+    return `<div class="pl-step pl-hoja">
+      <div class="eyebrow">Hoja de preguntas</div>
+      <h1>${fmt(e.title || 'Encuentro')}</h1>
+      <p class="hsub pl-noprint">Podés escribir acá, o imprimirla y llevarla en papel.</p>
+      <div class="pl-hacts pl-noprint"><button class="pl-btn" data-a="hojaback">← Volver</button><button class="pl-btn pri" data-a="print">🖨 Imprimir</button></div>
+      ${hojaSteps(e).filter(vis).map(s => `<div class="hq">${stepHtml(s, {answers:P.prog.answers, hoja:true})}</div>`).join('')}
+      <div class="pl-noprint">${privHtml()}<div class="pl-hacts"><button class="pl-btn" data-a="hojaback">← Volver</button></div></div>
+    </div>`;
+  }
+  function printHoja(){
+    // las cajas de texto se estiran para que en el papel se vea todo lo escrito (y quede lugar si están vacías)
+    P.root.querySelectorAll('.pl-hoja textarea').forEach(t => { t.style.height = 'auto'; t.style.height = Math.max(t.scrollHeight + 6, 120) + 'px'; });
+    window.print();
+  }
+  function closingHtml(){
+    const e = P.enc, c = e.closing || {};
+    const props = e.steps.filter(s => s.type === 'proposito' && has(P.prog.answers[s.id]));
+    let rec = '';
+    if (props.length) {
+      rec = `<div class="pl-recap"><h3>${props.length > 1 ? 'Te recordamos tus propósitos:' : 'Te recordamos tu propósito:'}</h3>` +
+        props.map(s => `<div class="rc">${props.length > 1 && has(s.title) ? `<small>${esc(s.title)}</small>` : ''}${esc(P.prog.answers[s.id])}</div>`).join('') + `</div>`;
+    }
+    return `<div class="pl-step pl-closing">
+      <p class="ct">${fmt(has(c.title) ? c.title : '¡Gracias por participar!')}</p>
+      ${has(c.sub) ? `<p class="cs">${fmt(c.sub)}</p>` : ''}
+      ${rec}
+    </div>`;
+  }
+  function onClick(ev){
+    const z = ev.target.closest('[data-zoom]');
+    if (z) { const l = document.createElement('div'); l.className = 'pl-light'; l.innerHTML = `<img src="${esc(z.src)}" alt="">`; l.onclick = () => l.remove(); P.root.appendChild(l); return; }
+    const sh = ev.target.closest('.bk-show');
+    if (sh) { const nx = sh.nextElementSibling; if (nx) nx.classList.remove('bk-hide'); sh.remove(); return; }
+    const op = ev.target.closest('[data-opt]');
+    if (op) {
+      const id = op.dataset.opt, k = id + ':o', v = op.dataset.v, st = P.enc.steps.find(s => s.id === id);
+      let sel = (P.prog.answers[k] || []).slice(); const j = sel.indexOf(v);
+      if (st && st.unica) sel = j < 0 ? [v] : []; else if (j < 0) sel.push(v); else sel.splice(j, 1);
+      P.prog.answers[k] = sel; saveProg();
+      P.root.querySelectorAll('[data-opt]').forEach(b => { if (b.dataset.opt === id) b.classList.toggle('on', sel.includes(b.dataset.v)); });
+      // elegir una opción puede cambiar qué pasos siguen (la cuenta de pasos, y en la hoja, qué preguntas se ven)
+      if (P.enc.steps.some(s => s.cond && s.cond.step === id)) { const m = P.root.querySelector('.pl-main'), y = m ? m.scrollTop : 0; render(); const m2 = P.root.querySelector('.pl-main'); if (m2) m2.scrollTop = y; }
+      return;
+    }
+    const b = ev.target.closest('[data-a]'); if (!b) return;
+    const a = b.dataset.a, pf = P.pf;
+    if (a === 'hoja') { P.hoja = true; render(); const m = P.root.querySelector('.pl-main'); if (m) m.scrollTop = 0; }
+    else if (a === 'hojaback') { P.hoja = false; render(); }
+    else if (a === 'print') printHoja();
+    else if (a === 'wipe') { if (confirm('¿Borrar todo lo que escribiste y marcaste en este encuentro? No se puede deshacer.')) { P.prog.answers = {}; saveProg(); render(); } }
+    else if (a === 'next') { if (!warnNote()) go(stepFrom(P.i, 1)); }
+    else if (a === 'warnclose') { const w = P.root.querySelector('.pl-warn'); if (w) w.remove(); }
+    else if (a === 'prev') go(stepFrom(P.i, -1));
+    else if (a === 'start') { P.prog.done = false; go(0); }
+    else if (a === 'resume') go(P.prog.i);
+    else if (a === 'home') { stopMusic(); P.hoja = false; go(-1); }
+    else if (a === 'finish') finish();
+    else if (a === 'close') close();
+    else if (a === 'notes') { const s = P.enc.steps[P.i]; if (s) { if (P.notesOpen.has(s.id)) P.notesOpen.delete(s.id); else P.notesOpen.add(s.id); render(); } }
+    else if (a === 'dark') { pf.dark = !pf.dark; applyPrefs(pf); renderTop(); }
+    else if (a === 'zin' || a === 'zout') {
+      const k = innerWidth <= 640 ? 'sizeM' : 'size', d = a === 'zin' ? 2 : -2;
+      pf[k] = Math.max(13, Math.min(48, pf[k] + d)); applyPrefs(pf);
+    }
+    else if (a === 'fs') { if (document.fullscreenElement) document.exitFullscreen(); else P.root.requestFullscreen().catch(()=>{}); }
+    else if (a === 'mute') { P.prog.muted = !P.prog.muted; saveProg(); updateMusic(); renderTop(); }
+  }
+  let ansTimer;
+  function onInput(ev){
+    const t = ev.target.closest('[data-ans]'); if (!t) return;
+    P.prog.answers[t.dataset.ans] = t.value;
+    clearTimeout(ansTimer);
+    ansTimer = setTimeout(() => { saveProg(); const m = P && P.root.querySelector(`[data-saved="${CSS.escape(t.dataset.ans)}"]`); if (m) m.textContent = 'Guardado en este dispositivo ✓'; }, 400);
+  }
+  function onKey(ev){
+    if (!P) return;
+    if (ev.target.closest && ev.target.closest('textarea,input,select,[contenteditable]')) return;
+    const l = P.root.querySelector('.pl-light');
+    if (ev.key === 'Escape') { if (l) { l.remove(); return; } if (document.fullscreenElement) return; if (P.hoja) { P.hoja = false; render(); return; } if (P.opts.closable !== false) close(); return; }
+    if (P.hoja) return;
+    if (ev.key === 'ArrowRight' || ev.key === 'PageDown') { if (P.i >= 0 && P.i < n() && !warnNote()) go(stepFrom(P.i, 1)); ev.preventDefault(); }
+    else if (ev.key === 'ArrowLeft' || ev.key === 'PageUp') { if (P.i >= 0) go(stepFrom(P.i, -1)); ev.preventDefault(); }
+  }
+  // música de fondo: suena en loop desde que se empieza; se calla en los pasos de video o audio
+  function startMusic(){
+    const m = P.enc.music; if (!m || P.music) return;
+    const src = m.file && P.opts.src ? P.opts.src(m.file) : m.url;
+    if (!src) return;
+    P.musicSrc = src;
+    const a = new Audio(src); a.loop = true; a.volume = .35; P.music = a;
+  }
+  function updateMusic(){
+    if (!P || !P.music) return;
+    const s = P.enc.steps[P.i];
+    const quiet = P.prog.muted || P.i < 0 || P.i >= n() || (s && (s.type === 'video' || s.type === 'audio'));
+    if (quiet) P.music.pause(); else P.music.play().catch(()=>{});
+  }
+  function stopMusic(){ if (P && P.music) { P.music.pause(); P.music.src = ''; P.music = null; } }
+  function fmtDate(d){
+    const m = String(d).match(/^(\d{4})-(\d{2})-(\d{2})$/); if (!m) return d;
+    const meses = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+    return `${+m[3]} de ${meses[+m[2] - 1]} de ${m[1]}`;
+  }
+  window.EncPlayer = {QICONS, open, close, stepHtml, fmt, esc, fmtDate, isOpen: () => !!P};
+})();
+</script>
+<script>
+(function(){
+  var D = JSON.parse(document.getElementById('enc-data').textContent), cache = {};
+  function src(f){
+    if (!f || !f.fid) return '';
+    if (cache[f.fid]) return cache[f.fid];
+    // el archivo está en un <script> propio, o adentro de la versión de lectura (src/href con data:)
+    var el = document.getElementById('enc-' + f.fid), b64, mime;
+    if (el) { b64 = el.textContent.trim(); mime = el.dataset.mime; }
+    else {
+      el = document.querySelector('#nojs [data-fid="' + f.fid + '"]'); if (!el) return '';
+      var v = el.getAttribute(el.dataset.at || 'src') || '', k = v.indexOf(',');
+      mime = v.slice(5, v.indexOf(';')); b64 = v.slice(k + 1);
+    }
+    var bin = atob(b64), u8 = new Uint8Array(bin.length);
+    for (var i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+    return cache[f.fid] = URL.createObjectURL(new Blob([u8], {type: mime || f.mime || ''}));
+  }
+  var foot = (D.attr || []).map(function(a){ return EncPlayer.esc(a); }).join('<br>');
+  // publicado en internet: lo escrito se conserva aunque se actualice la página; archivo suelto: cada versión empieza de cero
+  EncPlayer.open(D.enc, {src: src, embedded: true, closable: false, notes: false, storageKey: 'encuentro-' + D.enc.id + (D.pub ? '' : '-' + D.exportedAt), footer: foot});
+})();
+</script>
+</body></html>
